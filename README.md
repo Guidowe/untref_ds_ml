@@ -1,112 +1,32 @@
-[![](img/datayterritorio_web.jpg)](https://www.flacso.org.ar/formacion-academica/big-data-e-inteligencia-territorial/)
+# Materiales del curso Ciencia de Datos y Machine Learning. Aplicaciones en R
 
-# [Germán Rosati](gefero.github.io)
-
-# Presentación
-El objetivo de este curso es brindar una primera aproximación a algunos conceptos fundamentales de Machine Learning: hiperparámetros, sesgo-varianza, flujo de trabajo, error de generalización, serán algunos de los conceptos a trabajar.
+> Docentes: Germán Rosati - Pablo Tiscornia - Guido Weksler
 
 
------------------------------------------------------------------
+### Presentación
+Este curso se propone realizar una introducción a algunos conceptos fundamentales de la ciencia de datos. Se hará especial énfasis tanto en la etapa de extracción y limpieza de datos y se introducirán algunas técnicas para las etapas de modelado y comunicación. Se presentarán la implementación de análisis estadísticos básicos (descriptivos y regresiones) y algunas herramientas de visualización de datos. A su vez, el curso presentará algunos elementos metodológicos de la minería de datos/aprendizaje automático (balance sesgo-variancia, overfitting, etc.). Por último, se trabajará en la estimación de modelos basados en ensamble learning.
 
-# Consignas Trabajo Final
-## Fecha de entrega: 29/02/2020
+  
+# Programa
 
-- [Consignas](/tp_final/consignas.pdf)
-- [Datos](/tp_final/data/dptos_2014.csv)
-- [Descripción dataset](/tp_final/data/descripcion_data.pdf)
++ Unidad 1. Elementos de programación estadística en R: Objetos en R (vectores, matrices, data frames y listas). Introducción al tydiverse: data wrangling (select(), filter(), arrange(), mutate(). summarise(), group_by(), left_join()). Estructuras de control: for, if, map. Uso e implementación de funciones ad-hoc. Importación y exportación de datos (.csv, .txt, .tab, .sav, etc.).
++ Unidad 2. Visualización y generación de gráficos en R: Nociones de graficación (forma, color, tamaño, color). Niveles de medición y gráficos adecuados. Introducción a ggplot2: ggplot(), geom_points(), geom_smooth(), aes(), facet_wrap(), facet_grid().
++ Unidad 3. Análisis estadístico básico en R. Estadística descriptiva. Implementación y análisis de modelos de regresión lineal y logística. Funciones lm, glm y predict.
++ Unidad 4. Nociones básicas de data mining/aprendizaje automático. Tipos de problemas en aprendizaje supervisado: clasificación y regresión. Error de entrenamiento (training error), error de prueba (test error). Sobre-ajuste. Balance entre el sesgo y la variancia de un modelo. Métodos de estimación del error: partición del dataset, validación cruzada. Introducción a caret.
++ Unidad 5. Ensamble Learning. Clasificadores basados en árboles: CART. Algoritmos de Ensamble: bagging, random forest, boosting, Gradient Boostin. Uso de caret para entrenamiento de modelos. Interpretable Machine Learning: Herramientas para la interpretación de modelos de caja negra (Feature Importance, Partial Dependence Plots, Individual Conditional Expectance
+Plots. Aplicaciones en R.
 
------------------------------------------------------------------
+### Clases
+  
+__Clase 1 - Introducción a R Base:__
+  
++ Temas de clase: 
+  + Descripción del programa “R”. Lógica sintáctica del lenguaje y comandos básicos
+  + Presentación de la plataforma RStudio
+  + Caracteres especiales en “R”
+  + Operadores lógicos y aritméticos
+  + Definición de Objetos: Valores, Vectores y DataFrames
+  + Tipos de variable (numérica, de caracteres, lógicas)
+  + Lectura y Escritura de Archivos
 
-
-
-# Contenidos y materiales
-
-- __Unidad 1.__ Modelos de aprendizaje automático: fundamentos conceptuales, diferencias con el enfoque estadístico tradicional.
-
-- __Unidad 2.__ Problemas de clasificación y regresión.
-Aprendizaje supervisado y no supervisado. Modelos simples y ensambles de modelos.
-
-- __Unidad 3.__ Unidad Consideraciones para el diseño de modelos de aprendizaje automático con datos espaciales
-
-
-
-# Clase 1. 
-- [Explicación y práctica - Notebook](/clase_1/notebook/intro_caret_notebook.nb.html)
-- [Explicación y práctica - RCode](/clase_1/scripts/intro_caret_script.R)
-- [Slides Intro ML - pdf](/clase_1/slides/Clase1a.pdf)
-- [Slides Over-Under fitting - pdf](/clase_1/slides/Clase1b.pdf)
-
-Pueden descargarse la totalidad de los materiales del repositorio para trabajar en un único archivo .zip
-
-- [![](img/Download.png)](clase_1.zip)
-
-
-
-# Clase 2. 
-- [Explicación y práctica guiada - Notebook](/clase_2/notebook/cart_notebook.nb.html)
-- [Explicación y práctica guiada - RCode](/clase_2/scripts/cart_script.R)
-- [Slides CART - pdf](/clase_2/slides/CARTS.pdf)
-- [Slides Bagging/RF - pdf](/clase_2/slides/Ensamble_Bagging_RF.pdf)
-
-Pueden descargarse la totalidad de los materiales del repositorio para trabajar en un único archivo .zip
-
-- [![](img/Download.png)](clase_2.zip)
-
-
-
-# Clase 3. 
-- [Intuición Gradient Boosting Machine - Notebook](/clase_3/notebook/boosting_intuicion_notebook.nb.html)
-- [Intuición Gradient Boosting Machine - RCode](/clase_3/scripts/boosting_intuicion_script.R)
-- [Consignas práctica independiente - Notebook](/clase_3/notebook/practica.nb.html)
-- [Soluciones práctica independiente - Notebook](/clase_3/notebook/solution_practica.nb.html)
-- [Slides Boosting - pdf](/clase_3/slides/Boosting.pdf)
-
-Pueden descargarse la totalidad de los materiales del repositorio para trabajar en un único archivo .zip
-
-- [![](img/Download.png)](clase_3.zip)
-
-
-# Clase 4. 
-- [Explicación y práctica guiada - Clasificación - Notebook](/clase_3/notebook/rf_boosting_notebook.nb.html)
-- [Explicación y práctica guiada - Clasificación - RCode](/clase_3/scripts/rf_boosting_script.R)
-- [Interpretable ML - Notebook](/clase_4/notebook/interpretable_ml_notebook.nb.html)
-- [Interpretable ML - RCode](/clase_4/scripts/interpretable_ml_script.R)
-- [Consignas práctica independiente - Notebook](/clase_4/notebook/practica_independiente.nb.html)
-- [Soluciones práctica independiente - Notebook](/clase_4/notebook/practica_independiente_solution.nb.html)
-
-
-
-# Clase 5. 
-Docente invitado: [Diego Kozlowski](https://sites.google.com/view/diego-kozlowski/home)
-
-- [Explicación Notebook](https://diegokoz.github.io/workshop_text_mining/1_explicacion.nb.html)
-- [Explicación Slides](/clase_5/slides/Text_Mining.pdf)
-- [Práctica Guiada - Notebook](https://diegokoz.github.io/workshop_text_mining/2_practica_guiada.nb.html)
-- [Práctica Independiente -  Notebook](https://diegokoz.github.io/workshop_text_mining/3_practica_independiente.nb.html)
-
-Pueden descargarse la totalidad de los materiales del repositorio para trabajar en un único archivo .zip del repostorio de Diego...
-
-- [![](img/Download.png)](https://github.com/DiegoKoz/workshop_text_mining/archive/master.zip)
-
-
-
-
-# Librerías a utilizar
-El taller se desarrollará en R y se hará un uso extensivo de las siguientes librerías:
-
-- `tidyverse`
-- `caret`
-
-Pueden instalarse utilizando las instrucciones:
-
-```{r}
-install.packages('tidyverse')  
-install.packages('caret') 
-```
-
-
-# Bibliografía y sitios de consulta
-
-- [James, G., Witten, D., Hastie, T. y Tibshirani, R. (2015), _Introduction to Statistical Learning_, Berlin: Springer.](http://faculty.marshall.usc.edu/gareth-james/ISL/)
-
-- [Kuhn, M. (s/f), _The `caret` package](http://topepo.github.io/caret/index.html)
+<br>
