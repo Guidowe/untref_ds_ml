@@ -1,0 +1,62 @@
+---
+title: "Introducción a R para Ciencias Sociales. Aplicación práctica en la EPH"
+subtitle: "Clase 2 - Practica Guiada"
+output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  html_document:
+    toc: yes
+---
+
+# Ejercicios para practicar
+
+> Primero: reiniciar R (`Session --> Restart R`)
+
+
+
+## Ejercicio 1: 
+- Crear un VECTOR llamado _VEC0_ que contenga los números 1, 3, 4.
+- Crear 2 vectores ( _VEC1_, _VEC2_) que sean transformaciones del anterior
+- Crear 2 vectores con la misma cantidad de elementos que VEC0, pero con variables string (texto) ( _VEC3_, _VEC4_).
+- Crear un dataframe _DFRAME_ como combinación de  los __vectores__ creados previamente
+```{r}
+
+```
+
+## Ejercicio 1.2: 
+- El R Base provee una serie de datasets precargados, a los que se puede acceder directamente ejecutando en una línea de código sus nombres. Uno de ellos, que se muestra aquí abajo, es el dataset **iris**
+```{r}
+dataset::iris
+```
+
+ Resuelva las siguientes consignas, almacenando los resultados como nuevos objetos (en caso de que sea posible):
+ - Utilizar las ayudas de r ```?``` para ver de que se trata el set de datos
+ - Almacenar el dataset en nuestro ambiente como un objeto llamado *dataset.iris*
+ - Almacenar en otro objeto los nombres de las variables del dataset
+ - Cuales son los valores que puede tomar la variable **Species**?
+ - Calcular la media, el valor mínimo y el máximo de la variable Sepal.Length 
+ - Guardar en un objeto llamado *primer.dato* el valor contenido en la fila 1 y columna 1 del dataset 
+ - Guardar en un objeto llamado *segunda.columna* todos los valores de la columna 2
+ - Modificar en el dataset iris el primer valor por el número ```10.21```
+ - Utilizar los métodos de acceso ```[]``` para crear tres *subsets* (recortes) de la base:
+    - 1. Conservando únicamente los casos en que la "Specie" sea setosa
+    - 2. Conservando los casos en que la "Specie" sea setosa o versicolor
+    - 3. Conservando los casos en que Sepal.Length sea mayor a 5
+ - Agregar una columna al dataset que contenga el valor de Sepal.Length al cuadrado
+ 
+```{r}
+
+```
+
+
+<br>
+
+## Ejercicio 2:
+- Levantar la base Individual del 1er trimestre de 2019 de la EPH.
+- Levantar del Excel llamado ´´´Aglomerados EPH´´´ que se encuentra en la carpeta de Fuentes.  Pueden usar la función _read.xlsx_ de cualquiera de las siguientes librerías:
+    - Vista en clase: __openxlsx__ 
+    - Otra opción que utiliza otros parametros: __readxl__
+```{r}
+
+```
