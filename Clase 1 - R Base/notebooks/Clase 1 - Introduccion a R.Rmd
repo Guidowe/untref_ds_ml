@@ -6,6 +6,7 @@ output:
     toc: yes
     toc_float: yes
   html_document:
+    self_contained: no
     toc: yes
 ---
   
@@ -75,14 +76,10 @@ Veamos algunos ejemplos:
 ```{r echo=TRUE}
 A <- 1
 B = 2000
+C = "Buenas"
 
-individual_t117 <- read.table(file = '../Fuentes/usu_individual_t117.txt',
-                              sep=";", 
-                              dec=",", 
-                              header = TRUE, 
-                              fill = TRUE)
+base.de.trabajo <- readRDS("../data/EPH.RDS")
 
-Lista <- list(A,B,individual_t117)
 
 ```
 Al definir un elemento, el mismo queda guardado en el ambiente del programa, y podrá ser utilizado posteriormente para observar su contenido o para realizar una operación con el mismo.
@@ -338,13 +335,9 @@ Este objeto es central en el proceso de trabajo, ya que es la estructura más us
 
 Veamos un ejemplo de data frame creado a partir de la combinación de vectores:
 ```{r echo=TRUE}
-AGLOMERADO  <- c(32,33,33,33,32)
-
-SEXO  <-  c("Varon","Mujer","Mujer","Varon","Mujer")
-
-EDAD  <-  c(60,54,18,27,32)
-
-Datos <- data.frame(AGLOMERADO, SEXO, EDAD)
+Datos <- data.frame(AGLOMERADO = c(32,33,33,33,32),
+                    SEXO = c("Varon","Mujer","Mujer","Varon","Mujer"),
+                    EDAD = c(60,54,18,27,32))
 Datos
 class(Datos)
 ```
@@ -472,6 +465,39 @@ Nótese que al cargar/activar el paquete no son necesarias las comillas.
 
 # Lectura y escritura de archivos
 
+## RDS y Rdata 
+A la hora de importar información a nuestro ambiente ambiente de trabajo (como por ejemplo cargar una base de datos almacenada en el disco rígido de nuestra pc), o exportar información (guardar los resultados de un procesamiento en el disco) **R** cuenta con dos tipos de archivos de extensión propia: _.RDS_ y _.RData_. Trabajar con extensiones propias a R reduce los tiempos de procesamiento a la hora de la importación o exportación de archivos.       
+
+Para importar archivos _.RDATA_ necesitamos la función `load`, y para importar archivos _.RDS_ la función `readRDS`. En el parametro `file` tenemos que especificar el nombre completo del archivo, incluyendo el directorio donde se encuentra. Lo más sencillo es abrir comillas, apretar `Tab` y se despliega el menú de las cosas que tenemos en el directorio de trabajo. Si queremos movernos hacia arriba, agregamos `../`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#Funciones para importar
+load(file = "../data/EPH_2015_II.RData") #RDATA
+base.de.trabajo <- readRDS(file = "../data/EPH.RDS")#RDS
+```
+
+Los archivos _.RData_ pueden contener varios objetos al mismo tiempo, por ello, a la hora de importarlos no es necesario realizar una operación de asignación, ya que los objetos se cargarán en nuestro ambiente con el nombre que contenían cuando fueron guardados.               
+Los archivos _.RDS_ sólo contienen un objeto de R, por ello, a la hora de importarlos si no los asignamos mediante un ``` <-  ``` simplemente se ejecutarán en la consola sin quedar guardados en nuestro ambiente 
+
+Como puede observarse desde el ambiente (environment), la base de la EPH cuentan con más de 58.000 registros y 177 variables.
+Al trabajar con bases de microdatos, resulta conveniente contar con algunos comandos para tener una mirada rápida de la base, antes de comenzar a realizar los procesamientos que deseemos.     
+
+Veamos algunos de ellos:
+```{r eval=FALSE, include=FALSE}
+View(base.de.trabajo) # Abre la base en una ventana aparte
+names(base.de.trabajo) # Devuelve el nombre de todas las variables
+summary(base.de.trabajo)# Devuelve algunas medidas de resúmen para cada variable de la base
+head(base.de.trabajo)# Devuelve sólo los primeros registros de la base
+unique(base.de.trabajo$region)# Devuelve un listado de los diferentes valores que toma la variable en cuestión 
+```
+#### RDS y Rdata (exportación)
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#Funciones para exportar
+save(list = c("Datos","LISTA"),file = "mi_resultado.RDATA")
+saveRDS(object = data,file = "../data/EPH.RDS")
+```
+Para exportar archivos _.RDATA_ necesitamos la función `save` y para importar archivos _.RDS_ la función `saveRDS`. En caso de querer exportar más de un objeto, en un archivo _.RDATA_ en el parametro `list` debemos especificar un vector con los nombres de los objetos a guardar.
+
 ## .csv  y  .txt
 
 Hay __muchas__ funciones para leer archivos de tipo _.txt_ y _.csv_ (esto es, además de las que trae R base, se han creado paquetes para importar distintos tipos de archivos). La mayoría sólo cambia los parámetros que vienen por default.
@@ -482,57 +508,46 @@ Es importante tener en cuenta que una base de datos que proviene de archivos _.t
 - delimitador (```,```, tab, ```;```)
 - separador decimal 
 
-Un ejemplo de cómo importar un archivo de tipo _delimitado por comas_
-``` 
-dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...) 
-```
+Veamos un ejemplo de cómo importar un archivo de tipo _.txt_ y uno _.csv._
 
-Vamos con un ejemplo. Tenemos que levantar la base individual de EPH del 1er trimestre 2017
-
-En el parametro `file` tengo que especificar el nombre completo del archivo, incluyendo el directorio donde se encuentra. Lo más sencillo es abrir comillas, apretar `Tab` y se despliega el menú de las cosas que tenemos en el directorio de trabajo. Si queremos movernos hacia arriba, agregamos `../`
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-individual_t117 <- read.table(file = '../Fuentes/usu_individual_t117.txt',
+individual_t117 <- read.table(file = '../data/usu_individual_t117.txt',
                               sep=";", 
                               dec=",", 
                               header = TRUE, 
                               fill = TRUE)
-individual_t117
+test <- read.csv(file = "../data/test.csv")
 ```
   
-Como puede observarse desde el ambiente (environment), la base de la EPH cuentan con más de 58.000 registros y 177 variables.
-Al trabajar con bases de microdatos, resulta conveniente contar con algunos comandos para tener una mirada rápida de la base, antes de comenzar a realizar los procesamientos que deseemos.     
-
-Veamos algunos de ellos:
-```{r eval=FALSE, include=FALSE}
-View(individual_t117) # Abre la base en una ventana aparte
-names(individual_t117) # Devuelve el nombre de todas las variables
-summary(individual_t117)[ ,c(8,10,31,133)] # Devuelve algunas medidas de resúmen para todos los casos de las columnas enumeradas
-head(individual_t117)[ ,1:5] # Devuelve sólo los primeros valores para las columnas seleccionadas
-unique(individual_t117$REGION)# Devuelve un listado de los diferentes valores que toma la columna en cuestión del dataframe
-# Notar que seguimos utilizando funciones de R base ya que no necesitamos cargar ningún 'paquete' para utilizarlos
-```
 
 ## Excel 
 
-Para leer y escribir archivos excel debemos utilizar los comandos que vienen con la librería ´´´openxlsx´´´
-```{r, warning=FALSE}
+Para leer y escribir archivos excel debemos utilizar una librería que excede al R-Base. En este caso optamos por la librería ```openxlsx```
+```{r eval=FALSE, warning=FALSE, include=FALSE}
 #install.packages("openxlsx") # por única vez
 
 # Activamos la librería para poder usar sus funciones
 library(openxlsx) 
+listado.aglom <- openxlsx::read.xlsx("../data/Aglomerados EPH.xlsx")
 
-# Creamos una tabla cualquiera de prueba
-x <- 1:10
-y <- 11:20
-tabla_de_R <- data.frame(x, y)
-tabla_de_R
+# Procesamos los datos 
+listado.aglom$Anio <- 2020
 
-# Escribimos el archivo
-write.xlsx( x = tabla_de_R, file = "archivo_tabla.xlsx",
+# Escribimos el archivo al disco
+write.xlsx( x = listado.aglom, file = "listado_con_anio.xlsx",
             row.names = FALSE)
 ```
-
 Dónde lo guardó? Si trabajamos con un proyecto, R establece un directorio por default que es aquella carpeta donde hayamos creado el proyecto. Podemos entrar a las sub-carpetas agregando niveles con las ´´´__/__´´´ y al final escribiendo el nombre del archivo con su extensión (´´´archivo_tabla.xlsx´´´)
+
+## Paquete foreign 
+El paquete foreign permite levantar y exportar archivos de extensiones propias a otros paquetes estadísticos (Stata, SPSS), y sus funciones tienen una lógica similar a las vistas anteriormente.
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+#install.packages("foreing") # por única vez
+
+# Activamos la librería para poder usar sus funciones
+library(foreing) 
+base.en.dta <- foreign::read.dta("../data/Individual_t215.dta")
+```        
 
 ***
 
@@ -577,16 +592,4 @@ Rstudio tiene una herramienta muy útil de trabajo que son los **proyectos**. Es
 
 Un proyecto no es un sólo script, sino toda una carpeta de trabajo. 
 
-![logo Rpoject](img/Rproject.png)
-
-Para crearlo, vamos al logo de nuevo projecto (Arriba a la izquierda de la panatalla), y elegimos la carpeta de trabajo. 
-
-
-# Paquetes a utilizar a lo largo del curso:
-
-Para quienes esten trabajando con sus computadoras personales, dejamos a continuación un listado de los paquetes complementarios del R base que utilizaremos a lo largo del curso. Como la instalación requiere descargar múltiples archivos de internet recomendamos hacerlo cuando dispongan de una buena conexión. Con el siguiente comando podrían instalarlos todos de una vez:       
-```
-install.packages(c("tidyverse","openxlsx",'ggplot2','ggthemes', 'ggrepel','ggalt','kableExtra'))
-```
-  
-  
+Para crearlo, vamos al logo de nuevo projecto (Arriba a la izquierda de la pantalla), y elegimos la carpeta de trabajo. 
