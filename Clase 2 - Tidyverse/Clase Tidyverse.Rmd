@@ -1,0 +1,138 @@
+---
+title: "Práctica Guiada - Tidyverse"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+
+library(learnr)
+library(tidyverse)
+library(eph)
+library(gradethis)
+library(shiny)
+
+tutorial_options(exercise.timelimit = 60)
+#knitr::opts_chunk$set(error = TRUE)
+#knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+```
+
+## Introducción
+
+Esta es una práctica guiada para empezar a usar las herramientas del paquete __Tidyverse__
+
+En esta sección vamos a practicar:
+
+* Importación o lectura de base de datos
+* Paquete `Tidyverse` y sus principales funciones:
+  - `selec()`: Selecciona o descarta variables (columnas) de interés de una base de datos.
+  - `filter()`: Filtra observaciones (filas) en función de algún criterio o condición.
+  - `mutate()`: Crea variables nuevas (columnas).
+  - `summarise()`: Genera valores de forma resumida, en función de alguna operación (suma, multiplicación, etc.).
+  - `group_by()`: Cambia el alcance de cada función para que trabaje sobre conjuntos de casos específicos, en base a alguna variable y sus categorías.
+  - `%>% pipe`: Encadena un conjunto de operaciones como las descriptas arriba.
+
+###
+
+## Importación de archivos
+
+Importar archivos es una de las operaciones más comunes en el procesamiento de datos. Para importar un archivo lo primero a saber es el formato bajo el cual este fué creado. Algunos de los más comunes son:
+
+- __.txt__  --> Formato de texto.
+- __.cvs__  --> Formato Delimitado por coma.
+- __.xlsx__ --> Formato Excel 2007 en adelante.
+- __.xls__  --> Formato Excel previo a 2007.
+- __.sav__  --> Formato SPSS.
+- __.RData__--> Formato R
+
+
+### 
+
+* A continuación, importemos la base de microdatos correspondiente a la Encuesta Permanente de Hogares (EPH) para el 2do trimestre del año 2015, publicada en formato de texto, (.txt), que está ubicada en la carpeta [definir carpeta]. Recordemos que debemos identificar, primero, la carpeta en donde se encuentra alojada dicha base de datos.
+
+```{r importacion, exercise = TRUE, exercise.eval = FALSE}
+
+```
+
+```{r importacion-solution}
+base_ind_2t_2015 <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".")
+```
+
+<div id="importacion-hint">
+  **Pista:** Los parámetros más necesarios son `header =`, `sep = ` y `dec =`
+</div>
+
+
+###
+  
+  * Ahora intentemos con una extensión de archivo .xlsx. En la carpeta *** tenemos un archivo que contiene en finlas a cada uno de los aglomerados y, en columnas, una con el nombre y otra con el código de dichos aglomerados que figura en el diseño de registro.
+
+Para trabajar algunas extensiones de archivo
+
+```{r importacion2, exercise = TRUE, exercise.eval = FALSE}
+
+```
+
+```{r importacion2-solution}
+tabla_aglomerados <- foreign::read.dta(file = "C:/Users/Ptiscornia/Carpeta de Trabajo/Proyectos/R/learnr/Probando LEARNR/base/Individual_t215.dta") 
+```
+
+<div id="importacion2-hint">
+  **Pista:** Los parámetros más necesarios son `header =`, `sep = ` y `dec =`
+</div>
+  
+
+## Librerías
+
+Recordemos que para usar funciones que no sean parte del conjunto de herramientas de R base, debemos  instalar el paquete que contiene a través de la función `install.packages()` y cargarlo o ponerlo a disposición, listo para usar, a través de la sentencia `library()`:
+  
+```{r include=FALSE}
+library(eph)
+base_ind_2t_2015 <- get_microdata(year = 2015, trimester = 2, type = "individual")
+```
+
+```{r filter1, exercise = TRUE, exercise.eval = FALSE}
+filter(base_ind_2t_2015, CH06 == 30, CH03 == 1)
+```
+
+### Ejercicio 1.a
+
++ Descargar la base de datos del 2do trimestre de 2015 y asignarla a un objeto con el nombre `base_ind_2t_2015`
+
+```{r descarga, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r descarga-solution}
+### Si no hemos instalado el paquete eph:
+# install.packages("eph")
+library(eph)
+base_ind_2t_2015 <- get_microdata(year = 2015, trimester = 2, type = "individual")
+```
+
+<div id="filter-hint">
+  **Pista 1:** Recordá cargar la librería antes de correr la función
+</div>
+
+
+### Ejercicio 1.b
+
++ Seleccionar las variables `ESTADO`, `CAT_OCUP` y `CH06`, con las que más adelante trabajaremos
+
+```{r selecciona, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r selecciona-solution}
+library(tidyverse)
+base_consigna_1b <- base_ind_2t_2015 %>% 
+  select(CODUSU, TRIMESTRE, ANO4, ESTADO, CAT_INAC)
+```
+
+<div id="filter-hint">
+  **Pista 1:** Con la función `colnames` podés ver el nombre de todas las variables en la base.
+</div>
+  
