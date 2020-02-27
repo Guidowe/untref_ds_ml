@@ -91,7 +91,7 @@ scale_x_continuous(limits = c(0,50000))
 Para realizar estos gráficos, vamos a modificar un poco los datos:
 
 - filtramos los ingresos iguales a 0.
-- eliminamos las no respuestas de nivel educativo y las personas con educación especial.
+- eliminamos las no respuestas de nivel educativo y las personas con educación especia (quedandonos simplemente con las respuestas del 1 al 7)
 - eliminamos las respuestas de tipo de establecimiento = 'otros'.
 - recodificamos las variables para que tengan nombres más sugestivos:
     - __Nivel educativo__ además la convertimos a factor, porque queremos explicitarle el orden de los valores con ```levels()```. El "\\n"" es un _caracter especial_ que permite que el string continúe en la siguiente línea.
@@ -102,17 +102,18 @@ Para realizar estos gráficos, vamos a modificar un poco los datos:
 ```{r }
 ggdata <- Individual_t119 %>% 
   filter(P21>0,
-         !is.na(NIVEL_ED),
-         NIVEL_ED!=7, 
+         NIVEL_ED %in% 1:7, 
          PP04A !=3) %>% 
-  mutate(NIVEL_ED = factor(case_when(NIVEL_ED == 1  ~ 'Primaria \n Incompleta', # '\n' significa carriage return, o enter
+  mutate(NIVEL_ED = factor(case_when(NIVEL_ED == 7  ~ 'Sin \n Instrucción',
+                                     NIVEL_ED == 1  ~ 'Primaria \n Incompleta', # '\n' significa carriage return, o enter
                                      NIVEL_ED == 2  ~ 'Primaria \n Completa',
                                      NIVEL_ED == 3  ~ 'Secundaria \nIncompleta',
                                      NIVEL_ED == 4  ~ 'Secundaria \nCompleta',
                                      NIVEL_ED == 5  ~ 'Superior \nUniversitaria \nIncompleta',
                                      NIVEL_ED == 6  ~ 'Superior \nUniversitaria \nCompleta',
                                      FALSE          ~ 'Otro'),
-                           levels= c('Primaria \n Incompleta',
+                           levels= c('Sin \n Instrucción',
+                                     'Primaria \n Incompleta',
                                      'Primaria \n Completa',
                                      'Secundaria \nIncompleta',
                                      'Secundaria \nCompleta',

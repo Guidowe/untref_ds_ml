@@ -31,7 +31,7 @@ hist(iris$Sepal.Length, col = "lightsalmon1", main = "Histograma")
 #### png
 La función `png()` nos permite grabar una imagen en el disco. Lleva como argumento principal la ruta completa a donde se desea guardar la misma, incluyendo el nombre que queremos dar al archivo. A su vez pueden especificarse otros argumentos como el ancho y largo de la imagen, entre otros.  
 
-```{r}
+```{r, eval=FALSE, warning=FALSE}
 ruta_archivo <- "../Resultados/grafico1.PNG"
 ruta_archivo
 png(ruta_archivo)
@@ -155,6 +155,8 @@ También hay extensiones que te ayudan a escribir el código, como [esquisse](ht
 
 iris <- iris
 #Correr en la consola
+
+library(esquisse)
 esquisse::esquisser()
 ```
 
@@ -164,7 +166,7 @@ esquisse::esquisser()
 
 ```{r strip.white=FALSE}
 
-Individual_t119 <- read.table("../Fuentes/usu_individual_t119.txt",
+Individual_t119 <- read.table("../data/usu_individual_t119.txt",
                               sep=";", dec=",", header = TRUE, fill = TRUE)
 
 ```
