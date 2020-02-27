@@ -215,7 +215,8 @@ Existen un gran cantidad de objetos distintos en R, en lo que respecta al curso 
 ### Valores
 Los valores (o cualquier objeto de R) puede ser de distinta _clase_. Por lo general, cuando trabajemos con bases de datos, resultará importante reconocer que clase de variables contienen las mismas, ya que determinadas operaciones únicamente tendrán sentido para variables numéricas, otras sólo para variables de texto, etc.
 
-__Valores o variables "Numeric" (numéricos)__
+__Valores o variables "Numeric" (numéricos)__   
+
 ```{r echo=TRUE}
 A <- 1
 class(A)
@@ -253,31 +254,83 @@ class(B)
 
 ```
 
-__Vectores de clase 'factor'__
-  
-La diferencia entre un vector _character_ y un _factor_ es que el último sólo puede tomar algunos valores permitidos (levels), con un orden interno predefinido (el cual ,por ejemplo, se respetará a la hora de realizar un gráfico)
+__Vectores de clase 'factor'__      
 
-Los valores de tipo factor permiten establecer un ordenamiento a los datos,  representado por una etiqueta.
+La diferencia entre un vector _character_ y un _factor_ es que el último sólo puede tomar algunos valores permitidos (levels), y tiene un orden interno predefinido. 
 
-```{r echo=TRUE}
-# Vector de tipo factor
-C <- as.factor(A)
-C
-class(C)
+**¿Notan algo "malo" en el diseño de este gráfico?**  
+```{r echo=FALSE, purl = FALSE, warning=FALSE,fig.width=10}
+library(tidyverse)
+library(see)
+library(ggthemes)
+ejemplin<- base.de.trabajo %>% 
+        mutate(nivelmal = as.character(nivel_ed),
+               nivelbien = factor(nivel_ed,
+                                  levels =c( levels(base.de.trabajo$nivel_ed)[7],levels(base.de.trabajo$nivel_ed)[1:6])))
 
-# Defino etiquetas del vector numérico o caracter
-A
-A_etiquetas <- factor(A,
-                     labels = c('Varón','Mujer'))
-A_etiquetas
+ggplot(ejemplin,aes(x = nivelmal,p21, group = nivelmal,
+             fill = nivelmal)) +
+geom_violindot()+
+        scale_y_continuous(limits = c(0,30000),
+                           breaks = seq(0,30000,by = 5000))+
+        theme_tufte()+
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 45),
+              panel.grid.minor.y = element_line(colour = "grey95"),
+              panel.grid.major.y = element_line(colour = "grey60"))+
+        labs(x = "",
+             y = "Ingreso de la ocup. principal",
+             title = "Distribución del ingreso de ocup. ppal según nivel educativo",
+             subtitle = "2do Trimestre de 2015")
+```
 
+Los valores de tipo factor permiten establecer un ordenamiento a los datos, que además puede estar representado por una etiqueta (diferente al valor que toma en la base). Este ordenamiento se respetará, por ejemplo, a la hora de realizar un gráfico
+
+
+```{r echo=FALSE, purl = FALSE, warning=FALSE,fig.width=10}
+ggplot(ejemplin,aes(x = nivelbien,p21, group = nivelbien,
+             fill = nivelbien)) +
+geom_violindot()+
+        scale_y_continuous(limits = c(0,30000),
+                           breaks = seq(0,30000,by = 5000))+
+        theme_tufte()+
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 45),
+              axis.title.x = element_blank(),
+              panel.grid.minor.y = element_line(colour = "grey95"),
+              panel.grid.major.y = element_line(colour = "grey60"))+                labs(x = "",
+             y = "Ingreso de la ocup. principal",
+             title = "Distribución del ingreso de ocup. ppal según nivel educativo",
+             subtitle = "2do Trimestre de 2015")
 
 ```
 
-<br>
-  
-  
+Veamos un ejemplo sencillito con la variable de imputación de ingresos... 
+```{r echo=TRUE}
+#Que tipo de vector es la variable de la imputación de ingresos?
+class(base.de.trabajo$imp_inglab1)
+#Que únicos valores toma la variable en mi base?
+unique(base.de.trabajo$imp_inglab1) # Me devuelve en orden de aparición
 
+# Como hago si quiero que en la base la variable tenga etiquetas?
+#Puedo crearla como una nueva variable así 
+base.de.trabajo$imp_inglab_etiquetada <- factor(
+        base.de.trabajo$imp_inglab1,
+        labels = c('No imputado','Imputado'))
+
+unique(base.de.trabajo$imp_inglab_etiquetada)
+
+# Si quiero que tenga etiquetas, pero que las ordene al revés...
+base.de.trabajo$imp_inglab_etiq_orden <- factor(
+        base.de.trabajo$imp_inglab1,
+        labels = c('No imputado','Imputado'), #Defino etiquetas
+        levels = c(1,0))   #Defino el orden que quiero que guarde la variable
+
+#Notese que en "levels" tengo que pasar el valor del dato y no su etiqueta 
+unique(base.de.trabajo$imp_inglab_etiq_orden)
+```
+
+<br>
 Con los vectores numéricos se pueden hacer operaciones como, por ejemplo:
 * sumarle 2 a cada elemento del __vector__ anterior.
 ```{r echo=TRUE}
