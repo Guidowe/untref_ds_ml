@@ -1,6 +1,6 @@
 ---
-title: "Introducción a R para Ciencias Sociales. Aplicación práctica en la EPH"
-subtitle: "Clase 2 - Practica independiente"
+title: "Ciencia de Datos y Machine Learning. Aplicaciones en R"
+subtitle: "Clase 1 - Práctica independiente"
 output:
   html_notebook:
     toc: yes
@@ -11,6 +11,21 @@ output:
 
 
 # Ejercicios de práctica
+
+- Encuentre y corrija estos errores frecuentes a la hora de comenzar a codear
+```{r}
+mivector <- c(1,10,15,25)
+
+doble vector <- mivector*2
+
+PI <- 3,14
+
+Elementos2y4<- mivector(2,4)
+
+otrovector <- ("que","salame")
+
+Ahora_si <- c("que, "salame")
+```
 
 - Crear un OBJETO llamado _COSA_ definido como el resultado de la multiplicación: 5*6
 ```{r}
@@ -24,6 +39,7 @@ output:
 ```
 
 
+
 - Modificar el segundo elemento del _VECTOR0_, asignandole el valor *40*
 ```{r}
 
@@ -32,24 +48,14 @@ output:
 
 - Crear 3 vectores con la misma cantidad de elementos que VEC0, pero con variables string (texto) ( _VECTOR1_, _VECTOR2_, _VECTOR3_).
 - Crear un dataframe _DATAF_ como combinación de todos los __vectores__ creados previamente
+- Renombrar una variable del dataframe bajo el título _faltapoco_
+- Crear en el dataframe una nueva variable _"yanosvamo"_ que surga de una operación con los elementos de las variables anteriores
 ```{r}
 
 ```
 
 
-- Crear un objeto llamado *OTRA_COSA* que guarde el valor contenido en la segunda fila y tercera columna del dataframe _DATAF_
-```{r}
-
-```
-
-
-- Levantar la base Individual del 4to trimestre de 2016 de la EPH
-```{r}
-
-```
-
-
-- Levantar del Excel llamado CANASTAS que se encuentra en la carpeta de Fuentes, la hoja "CBA" y definirla como _HojaCBA_.
+- Levantar una base de datos, hacer alguna una modificación a gusto, y guardarla en una carpeta de la pc
 ```{r}
 
 ```

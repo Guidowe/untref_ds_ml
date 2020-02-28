@@ -1,6 +1,6 @@
 ---
-title: "Introducción a R para Ciencias Sociales. Aplicación práctica en la EPH"
-subtitle: "Clase 2 - Practica Guiada"
+title: "Ciencia de Datos y Machine Learning. Aplicaciones en R"
+subtitle: "Clase 1 - Práctica guíada"
 output:
   html_notebook:
     toc: yes
@@ -31,15 +31,16 @@ dataset::iris
 ```
 
  Resuelva las siguientes consignas, almacenando los resultados como nuevos objetos (en caso de que sea posible):
- - Utilizar las ayudas de r ```?``` para ver de que se trata el set de datos
- - Almacenar el dataset en nuestro ambiente como un objeto llamado *dataset.iris*
- - Almacenar en otro objeto los nombres de las variables del dataset
- - Cuales son los valores que puede tomar la variable **Species**?
- - Calcular la media, el valor mínimo y el máximo de la variable Sepal.Length 
- - Guardar en un objeto llamado *primer.dato* el valor contenido en la fila 1 y columna 1 del dataset 
- - Guardar en un objeto llamado *segunda.columna* todos los valores de la columna 2
- - Modificar en el dataset iris el primer valor por el número ```10.21```
- - Utilizar los métodos de acceso ```[]``` para crear tres *subsets* (recortes) de la base:
+ 
+- Utilizar las ayudas de r ```?``` para ver de que se trata el set de datos
+- Almacenar el dataset en nuestro ambiente como un objeto llamado *dataset.iris*
+- Almacenar en otro objeto los nombres de las variables del dataset        
+- Cuales son los valores que puede tomar la variable **Species**?          
+- Calcular la media, el valor mínimo y el máximo de la variable Sepal.Length     
+- Guardar en un objeto llamado *primer.dato* el valor contenido en la fila 1 y columna 1 del dataset         
+- Guardar en un objeto llamado *segunda.columna* todos los valores de la columna 2    
+- Modificar en el dataset iris el primer valor por el número ```10.21```
+- Utilizar los métodos de acceso ```[]``` para crear tres *subsets* (recortes) de la base:
     - 1. Conservando únicamente los casos en que la "Specie" sea setosa
     - 2. Conservando los casos en que la "Specie" sea setosa o versicolor
     - 3. Conservando los casos en que Sepal.Length sea mayor a 5
@@ -53,10 +54,16 @@ dataset::iris
 <br>
 
 ## Ejercicio 2:
-- Levantar la base Individual del 1er trimestre de 2019 de la EPH.
-- Levantar del Excel llamado ´´´Aglomerados EPH´´´ que se encuentra en la carpeta de Fuentes.  Pueden usar la función _read.xlsx_ de cualquiera de las siguientes librerías:
-    - Vista en clase: __openxlsx__ 
-    - Otra opción que utiliza otros parametros: __readxl__
-```{r}
+- Levantar los siguientes archivos al ambiente de trabajo:
+    - EPH_2015_II.RData
+    - usu_individual_t117.txt 
+    - Aglomerados EPH.xslx
+- Tomando el recorte de la base del 2 trimestre de 2015:
+    - ¿Cuál es el máximo valor de la variable de ingresos de la ocupación principal (p21)?
+    - ¿En que aglomerado se encuentra el máximo valor de ingreso de la ocupación principal (p21)?
+    - ¿Cuantos ingresos laborales estan imputados (imp_inglab==1) y cuantos no lo están?
+    - Cambiar en la base el nombre de la columna *ch04* por *Sexo* 
 
+```{r}
+load("../data/EPH_2015_II.RData")
 ```

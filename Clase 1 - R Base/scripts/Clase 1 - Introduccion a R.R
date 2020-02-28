@@ -2,7 +2,8 @@ A <- 1
 B = 2000
 C = "Buenas"
 
-base.de.trabajo <- readRDS("../data/EPH.RDS")
+
+base.de.trabajo <- readRDS("Clase 1 - R Base/data/EPH.RDS")
 
 
 
@@ -69,42 +70,41 @@ B
 class(B)
 
 
-# Vector de tipo factor
-C <- as.factor(A)
-C
-class(C)
-
-# Defino etiquetas del vector numérico o caracter
-A
-A_etiquetas <- factor(A,
-                     labels = c('Varón','Mujer'))
-A_etiquetas
 
 
 
-D <- c(1, 3, 4)
-D <- D + 2
-D
 
-E <- D + 1:3 #esto es equivalente a hacer 3+1, 5+2, 6+9 
-E
+#Que tipo de vector es la variable de la imputación de ingresos?
+class(base.de.trabajo$imp_inglab1)
+#Que únicos valores toma la variable en mi base?
+unique(base.de.trabajo$imp_inglab1) # Me devuelve en orden de aparición
 
-# Si quiero al elemento 2 del objeto E:
-E 
-E[2]
+# Como hago si quiero que en la base la variable tenga etiquetas?
+#Puedo crearla como una nueva variable así 
+base.de.trabajo$imp_inglab_etiquetada <- factor(
+        base.de.trabajo$imp_inglab1,
+        labels = c('No imputado','Imputado'))
 
-E_posicion2 <-  E[2]
-E_posicion2
+unique(base.de.trabajo$imp_inglab_etiquetada)
 
-rm(E_posicion2)
-E_posicion2
+# Si quiero que tenga etiquetas, pero que las ordene al revés...
+base.de.trabajo$imp_inglab_etiq_orden <- factor(
+        base.de.trabajo$imp_inglab1,
+        labels = c('No imputado','Imputado'), #Defino etiquetas
+        levels = c(1,0))   #Defino el orden que quiero que guarde la variable
 
-E
-E[2] <- "Pablo"
-E
+#Notese que en "levels" tengo que pasar el valor del dato y no su etiqueta 
+unique(base.de.trabajo$imp_inglab_etiq_orden)
 
-# Tener cuidado al modificar el tipo de uno de los valores y no el de todos los del objeto:
-class(E)
+# Si quiero al elemento 2 del objeto B:
+B 
+B[2]
+
+B_posicion2 <-  B[2]
+B_posicion2
+
+rm(B_posicion2)
+B_posicion2
 
 Datos <- data.frame(AGLOMERADO = c(32,33,33,33,32),
                     SEXO = c("Varon","Mujer","Mujer","Varon","Mujer"),
@@ -133,20 +133,20 @@ mean(Edad_Aglo32)
 # Otra forma de lograr el mismo resultado
 Edad_Aglo32 <- mean(Datos$EDAD[Datos$AGLOMERADO==32])
 
-LISTA <- list(A,B,C,D,E,Datos$AGLOMERADO, DF = Datos)
+LISTA <- list(A,B,C,Datos$AGLOMERADO, DF = Datos)
 
 
 LISTA$DF
 LISTA$DF$EDAD
 LISTA$DF$EDAD[2]
 
-LISTA[[6]]
+LISTA[[4]]
 
-LISTA[[6]][1]
+LISTA[[4]][1]
 
-LISTA[[7]][2]
+LISTA[[5]][2]
 
-LISTA[[7]][2,1]
+LISTA[[5]][2,1]
 
 paste("Pega","estas", 4, "palabras", sep = " ")
 
@@ -169,41 +169,41 @@ sum(1:5)
 mean(1:5)
 
 #Funciones para importar
-load(file = "../data/EPH_2015_II.RData") #RDATA
-base.de.trabajo <- readRDS(file = "../data/EPH.RDS")#RDS
+load(file = "Clase 1 - R Base/data/EPH_2015_II.RData") #RDATA
+base.de.trabajo <- readRDS(file = "Clase 1 - R Base/data/EPH.RDS")#RDS
 
-## View(base.de.trabajo) # Abre la base en una ventana aparte
-## names(base.de.trabajo) # Devuelve el nombre de todas las variables
-## summary(base.de.trabajo)# Devuelve algunas medidas de resúmen para cada variable de la base
-## head(base.de.trabajo)# Devuelve sólo los primeros registros de la base
-## unique(base.de.trabajo$region)# Devuelve un listado de los diferentes valores que toma la variable en cuestión
+View(base.de.trabajo) # Abre la base en una ventana aparte
+names(base.de.trabajo) # Devuelve el nombre de todas las variables
+summary(base.de.trabajo)# Devuelve algunas medidas de resúmen para cada variable de la base
+head(base.de.trabajo)# Devuelve sólo los primeros registros de la base
+unique(base.de.trabajo$region)# Devuelve un listado de los diferentes valores que toma la variable en cuestión
 
 ## #Funciones para exportar
-## save(list = c("Datos","LISTA"),file = "mi_resultado.RDATA")
-## saveRDS(object = data,file = "../data/EPH.RDS")
+save(list = c("Datos","LISTA"),file = "mi_resultado.RDATA")
+saveRDS(object = data,file = "EPH.RDS")
 
-individual_t117 <- read.table(file = '../data/usu_individual_t117.txt',
+individual_t117 <- read.table(file = 'Clase 1 - R Base/data/usu_individual_t117.txt',
                               sep=";", 
                               dec=",", 
                               header = TRUE, 
                               fill = TRUE)
-test <- read.csv(file = "../data/test.csv")
+test <- read.csv(file = "Clase 1 - R Base/data/test.csv")
 
 ## #install.packages("openxlsx") # por única vez
-## 
-## # Activamos la librería para poder usar sus funciones
-## library(openxlsx)
-## listado.aglom <- openxlsx::read.xlsx("../data/Aglomerados EPH.xlsx")
-## 
-## # Procesamos los datos
-## listado.aglom$Anio <- 2020
-## 
-## # Escribimos el archivo al disco
-## write.xlsx( x = listado.aglom, file = "listado_con_anio.xlsx",
-##             row.names = FALSE)
 
-## #install.packages("foreing") # por única vez
-## 
-## # Activamos la librería para poder usar sus funciones
-## library(foreing)
-## base.en.dta <- foreign::read.dta("../data/Individual_t215.dta")
+# Activamos la librería para poder usar sus funciones
+library(openxlsx)
+listado.aglom <- openxlsx::read.xlsx("Clase 1 - R Base/data/Aglomerados EPH.xlsx")
+
+# Procesamos los datos
+listado.aglom$Anio <- 2020
+
+# Escribimos el archivo al disco
+write.xlsx( x = listado.aglom, file = "listado_con_anio.xlsx",
+            row.names = FALSE)
+
+#install.packages("foreign") # por única vez
+
+# Activamos la librería para poder usar sus funciones
+library(foreign)
+base.en.dta <- foreign::read.dta("Clase 1 - R Base/data/Individual_t215.dta")

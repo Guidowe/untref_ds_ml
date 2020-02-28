@@ -78,6 +78,7 @@ A <- 1
 B = 2000
 C = "Buenas"
 
+
 base.de.trabajo <- readRDS("../data/EPH.RDS")
 
 
@@ -149,7 +150,8 @@ Los operadores lógicos son usados para describir relaciones, expresadas como ve
 - Menor o igual: $<=$
 - Igual: $==$
 - Distinto: $!=$
-- Pertenece a: $%in%$ 
+- Pertenece a: ```%in%```        
+
 
 ```{r echo=TRUE}
 #Redefinimos los valores A y B
@@ -330,54 +332,30 @@ base.de.trabajo$imp_inglab_etiq_orden <- factor(
 unique(base.de.trabajo$imp_inglab_etiq_orden)
 ```
 
-<br>
-Con los vectores numéricos se pueden hacer operaciones como, por ejemplo:
-* sumarle 2 a cada elemento del __vector__ anterior.
-```{r echo=TRUE}
-D <- c(1, 3, 4)
-D <- D + 2
-D
-```
 
-* sumarle 1 al primer elemento, 2 al segundo, y 3 al tercer elemento del __vector__ anterior
-```{r echo=TRUE}
-E <- D + 1:3 #esto es equivalente a hacer 3+1, 5+2, 6+9 
-E
-```
-```1:3``` significa que queremos todos los números enteros desde 1 hasta 3. 
-
-<br>
-
-En R podemos quedarnos con algunos elemenos de los vectores para trabajar con o sobre ellos.
+En R podemos separar  algunos elemenos de los vectores para trabajar con o sobre ellos.
 Para acceder a un elemento del vector podemos buscarlo a través del número de orden, identificando al mismo utilizando los signos ```[ ]```
 
 ```{r echo=TRUE}
-# Si quiero al elemento 2 del objeto E:
-E 
-E[2]
+# Si quiero al elemento 2 del objeto B:
+B 
+B[2]
 ```
 
 Si nos interesa quedarnos con dicho valor, al buscarlo lo asignamos a un nuevo objeto.
 ```{r echo=TRUE}
-E_posicion2 <-  E[2]
-E_posicion2
+B_posicion2 <-  B[2]
+B_posicion2
 ```
 
 Para __borrar__ un objeto del ambiente de trabajo, utilizamos la función _```rm()```_
 ```{r error=TRUE}
-rm(E_posicion2)
-E_posicion2
+rm(B_posicion2)
+B_posicion2
 ```
 
-También podemos cambiar el texto del segundo elemento de E, por el texto "Pablo"
-```{r echo=TRUE}
-E
-E[2] <- "Pablo"
-E
+**¿Como podríamos hacer para modificar el valor de un elemento del vector B?**
 
-# Tener cuidado al modificar el tipo de uno de los valores y no el de todos los del objeto:
-class(E)
-```
 
 ### Data Frames
 Un Data Frame es una estructura de datos de 2 dimensiones o tabla, donde cada columna representa una variable, y cada fila una observación. 
@@ -415,6 +393,12 @@ Datos$AGLOMERADO[3,2]
 
 Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna AGLOMERADO.    
 
+
+**¿Cómo podríamos crear una nueva variable en un dataframe?**
+Intentemos crear en *base.de.trabajo* una columna que tenga la edad elevada al cuadrado
+
+***
+#### Filtros en R Base 
 Acorde a lo visto anteriormente, el acceso a los __dataframes__ mediante  ```[ ]``` puede utilizarse también para realizar filtros (devolver el o los valores en función de otro valor definido). 
 Por ejemplo, puedo utilizar los  ```[ ]``` para obtener del __dataframe__ ```Datos ```  unicamente los registros del AGLOMERADO 32:
 ```{r error=TRUE}
@@ -443,9 +427,9 @@ La lógica de esta sintaxis sería: "Me quedó con la variable __EDAD__, cuando 
 
 ### Listas
 
-Contienen una concatenación de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y _todo ello a la vez_
+Las listas son elementos que almacenan una serie de objetos de cualquier clase. Así, una lista puede contener al mismo tiempo dataframes, vectores, una matriz, un gráfico, incluso una lista. Es decir, en una lista es posible almacenar cualquier tipo de objeto de R. 
 ```{r}
-LISTA <- list(A,B,C,D,E,Datos$AGLOMERADO, DF = Datos)
+LISTA <- list(A,B,C,Datos$AGLOMERADO, DF = Datos)
 
 ```
 
@@ -458,16 +442,16 @@ LISTA$DF$EDAD[2]
 
 También se pueden usar corchetes dobles __```[[]]```__ para acceder a los distintos elementos de una lista.
 ```{r}
-LISTA[[6]]
+LISTA[[4]]
 ```
 
 O para acceder a un valor/vector (dependiendo del tipo de elemento de la lista) de un objeto de la lista:
 ```{r}
-LISTA[[6]][1]
+LISTA[[4]][1]
 
-LISTA[[7]][2]
+LISTA[[5]][2]
 
-LISTA[[7]][2,1]
+LISTA[[5]][2,1]
 ```
 
 ## Funciones:
@@ -535,7 +519,7 @@ Como puede observarse desde el ambiente (environment), la base de la EPH cuentan
 Al trabajar con bases de microdatos, resulta conveniente contar con algunos comandos para tener una mirada rápida de la base, antes de comenzar a realizar los procesamientos que deseemos.     
 
 Veamos algunos de ellos:
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE, include=TRUE}
 View(base.de.trabajo) # Abre la base en una ventana aparte
 names(base.de.trabajo) # Devuelve el nombre de todas las variables
 summary(base.de.trabajo)# Devuelve algunas medidas de resúmen para cada variable de la base
@@ -544,7 +528,7 @@ unique(base.de.trabajo$region)# Devuelve un listado de los diferentes valores qu
 ```
 #### RDS y Rdata (exportación)
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 #Funciones para exportar
 save(list = c("Datos","LISTA"),file = "mi_resultado.RDATA")
 saveRDS(object = data,file = "../data/EPH.RDS")
@@ -576,7 +560,7 @@ test <- read.csv(file = "../data/test.csv")
 ## Excel 
 
 Para leer y escribir archivos excel debemos utilizar una librería que excede al R-Base. En este caso optamos por la librería ```openxlsx```
-```{r eval=FALSE, warning=FALSE, include=FALSE}
+```{r eval=FALSE, warning=FALSE, include=TRUE}
 #install.packages("openxlsx") # por única vez
 
 # Activamos la librería para poder usar sus funciones
@@ -594,11 +578,11 @@ Dónde lo guardó? Si trabajamos con un proyecto, R establece un directorio por 
 
 ## Paquete foreign 
 El paquete foreign permite levantar y exportar archivos de extensiones propias a otros paquetes estadísticos (Stata, SPSS), y sus funciones tienen una lógica similar a las vistas anteriormente.
-```{r eval=FALSE, warning=FALSE, include=FALSE}
-#install.packages("foreing") # por única vez
+```{r eval=FALSE, warning=FALSE, include=TRUE}
+#install.packages("foreign") # por única vez
 
 # Activamos la librería para poder usar sus funciones
-library(foreing) 
+library(foreign) 
 base.en.dta <- foreign::read.dta("../data/Individual_t215.dta")
 ```        
 
