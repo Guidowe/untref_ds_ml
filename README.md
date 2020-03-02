@@ -20,6 +20,7 @@ Plots. Aplicaciones en R.
   
 __Clase 1 - Introducción a R Base:__
   
+
 + Temas de clase: 
   + Descripción del programa “R”. Lógica sintáctica del lenguaje y comandos básicos
   + Presentación de la plataforma RStudio
@@ -28,5 +29,21 @@ __Clase 1 - Introducción a R Base:__
   + Definición de Objetos: Valores, Vectores y DataFrames
   + Tipos de variable (numérica, de caracteres, lógicas)
   + Lectura y Escritura de Archivos
+
+Descarga de materiales
+[![](img/Download.png)](Clase 1 - R Base.rar)
+
+<br>
+
+__Clase 3 - Visualización de la información__
+  
++ Temas de clase:
+  + Gráficos básicos de R (función “plot”): Comandos para la visualización ágil de la información
+  + Gráficos elaborados en R (función “ggplot”): 
+    + Gráficos de línea, barras, densidad, boxplots, geom_smooth 
+    + Extensiones de ggplot
+
+Descarga de materiales
+[![](img/Download.png)](Clase 3 - Graficos.rar)
 
 <br>
