@@ -31,6 +31,7 @@ __Clase 1 - Introducción a R Base:__
   + Lectura y Escritura de Archivos
 
 Descarga de materiales
+
 [![](img/Download.png)](Clase 1 - R Base.rar)
 
 <br>
@@ -44,6 +45,7 @@ __Clase 3 - Visualización de la información__
     + Extensiones de ggplot
 
 Descarga de materiales
+
 [![](img/Download.png)](Clase 3 - Graficos.rar)
 
 <br>
