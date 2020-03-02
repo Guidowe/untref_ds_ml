@@ -1,6 +1,6 @@
 ---
-title: Visualización de la información I
-subtitle: Explicación
+title: "Ciencia de Datos y Machine Learning. Aplicaciones en R"
+subtitle: "Clase 3 - Visualización de la infromación"
 date: ""
 output:
   html_notebook: 
@@ -126,6 +126,18 @@ g
 ```
 
 
+#### Guardado en disco              
+Una vez que hemos diseñado el gráfico con todos los parámetros como queremos, para exportarlo a una carpeta de nuestra PC podemos utilizar la función ```ggsave()```. Sus dos parámetros escenciales son:           
+
+ - ```filename```: ruta completa hacia donde quiero exportar el archivo
+ - ```plot```: que gráfico exportar (Si no especificamos tomará el último ejecutado en el visualizador de RStudio)
+
+
+```{r,eval = FALSE,warning=FALSE}
+ggsave(filename = "../Resultados/plotiris.png",plot = g)
+```
+
+
 #### Extensiones de [GGplot](http://www.ggplot2-exts.org/gallery/).
 
 La librería GGplot tiene a su vez muchas otras librerías que extienden sus potencialidades. Entre nuestras favoritas están:
@@ -161,59 +173,49 @@ esquisse::esquisser()
 ```
 
 
-### Ejemplo con datos reales
-#### Boxplot de ingresos de la ocupación principal, según nivel educativo
+### Ejemplo con datos de EPH
 
 ```{r strip.white=FALSE}
 
-Individual_t119 <- read.table("../data/usu_individual_t119.txt",
-                              sep=";", dec=",", header = TRUE, fill = TRUE)
+load("../data/EPH_2015_II.RData")
 
 ```
-
-
-
-Hacemos un procesamiento simple: Sacamos los ingresos iguales a cero y las no respuestas de nivel educativo.    
-Es importante que las variables sean del tipo que conceptualmente les corresponde (el nivel educativo es una variable categórica, no continua), para que el ggplot pueda graficarlo correctamente. 
-
+Hacemos un procesamiento simple para los gráficos a realizar: Sacamos los ingresos iguales a cero
 ```{r}
-# Las variables sexo( CH04 ) y Nivel educativo están codificadas como números, y el R las entiende como numéricas.
-class(Individual_t119$NIVEL_ED)
-class(Individual_t119$CH04)
-
-ggdata <- Individual_t119 %>% 
-  filter(P21>0, !is.na(NIVEL_ED)) %>% 
-  mutate(NIVEL_ED = as.factor(NIVEL_ED),
-         CH04     = as.factor(CH04))
+ggdata <- data %>% 
+  filter(p21>0) 
 ```
+#### Boxplot de ingresos de la ocupación principal, según calificación
 
 ```{r}
-
-ggplot(ggdata, aes(x = NIVEL_ED, y = P21)) +
+ggplot(ggdata, aes(x = calif, y = p21)) +
   geom_boxplot()+
-  scale_y_continuous(limits = c(0, 40000))#Restrinjo el gráfico hasta ingresos de $40000
+  scale_y_continuous(limits = c(0, 40000))
 ```
 
 Si queremos agregar la dimensión _sexo_, podemos hacer un ```facet_wrap()```
 
 ```{r}
 
-ggplot(ggdata, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED )) +
+ggplot(ggdata, aes(x= calif, y = p21, group = calif, fill = calif )) +
   geom_boxplot()+
   scale_y_continuous(limits = c(0, 40000))+
-  facet_wrap(~ CH04, labeller = "label_both")
+  theme(legend.position = "none", # saco la leyenda,
+        axis.title  = element_blank(), # saco los titulos de ejes,
+        axis.text.x = element_text(angle = 45))+ #inclino texto de eje x     
+  facet_wrap(~ ch04, labeller = "label_both")
 ```
 
-Por la forma en que está presentado el gráfico, el foco de atención sigue puesto en las diferencias de ingresos entre niveles educativo. Simplemente se agrega un corte por la variable de sexo.
+Por la forma en que está presentado el gráfico, el foco de atención sigue puesto en las diferencias de ingresos entre calificaciones. Simplemente se agrega un corte por la variable de sexo.
 
 Si lo que queremos hacer es poner el foco de atención en las diferencias por sexo, simplemente basta con invertir la variable x especificada con la variable utilizada en el ```facet_wrap```
 
 
 ```{r}
-ggplot(ggdata, aes(x= CH04, y = P21, group = CH04, fill = CH04 )) +
+ggplot(ggdata, aes(x= ch04, y = p21, group = ch04, fill = ch04 )) +
   geom_boxplot()+
   scale_y_continuous(limits = c(0, 40000))+
-  facet_grid(~ NIVEL_ED, labeller = "label_both") +
+  facet_grid(~ calif) +
   theme(legend.position = "none")
 
 ```
