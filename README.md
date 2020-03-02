@@ -30,7 +30,7 @@ __Clase 1 - Introducción a R Base:__
   + Tipos de variable (numérica, de caracteres, lógicas)
   + Lectura y Escritura de Archivos
 
-Descarga de materiales
+ - Descarga de materiales clase 1
 
 [![](img/Download.png)](Clase 1 - R Base.rar)
 
@@ -44,7 +44,7 @@ __Clase 3 - Visualización de la información__
     + Gráficos de línea, barras, densidad, boxplots, geom_smooth 
     + Extensiones de ggplot
 
-Descarga de materiales
+ - Descarga de materiales clase 3
 
 [![](img/Download.png)](Clase 3 - Graficos.rar)
 
