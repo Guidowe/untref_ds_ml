@@ -1,0 +1,492 @@
+---
+title: "Práctica Guiada - Tidyverse"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    id: "com.example.tutorials.my-first-tutorial1"
+    version: 0.1
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(shiny)
+library(tidyverse)
+library(eph)
+
+tutorial_options(exercise.timelimit = 60)
+#tutorial_options(exercise.cap = "Sandbox")
+tutorial_options(exercise.cap = "")
+
+#knitr::opts_chunk$set(error = TRUE)
+#knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+#setwd(dir = "data/")
+#base <- eph::get_microdata(year = 2015, trimester = 2, type = "individual")
+base <- read.table(file = "data/Individual_t215.txt", 
+                   sep = ";", header = T)
+```
+
+## Introducción
+
+Esta es una práctica guiada para empezar a usar las herramientas del paquete [Tidyverse](https://www.tidyverse.org/).
+
+En esta sección vamos a ejercitar el uso de las siguientes funciones:
+
+  - `selec()`: Selecciona o descarta variables (columnas) de interés de una base de datos.
+  - `filter()`: Filtra observaciones (filas) en función de algún criterio o condición.
+  - `mutate()`: Crea variables nuevas (columnas).
+  - `summarise()`: Genera valores de forma resumida, en función de alguna operación (suma, multiplicación, etc.).
+  - `group_by()`: Cambia el alcance de cada función para que trabaje sobre conjuntos de casos específicos, en base a alguna variable y sus categorías.
+  - `%>%`: _Pipe_ (de tubería) encadena un conjunto de operaciones como las descriptas arriba.
+
+
+###
+### Base de trabajo
+
+En este documento ya se encuentra cargada en el ambiente la base de microdatos de la EPH para individuos, correspondiente al 2do trimestre de 2015. Podemos chequear, de forma preliminar, algunas características generales de la misma a través de las funciones  `str()`, `summary()` y `colnames()`:
+
+#### _Vista previa de las variables (sobre las primeras 10 columnas)_
+```{r str, exercise = TRUE, exercise.eval=FALSE}
+str(base[ ,1:10])
+```
+
+###
+#### _Algunas medidas de resúmen de las variables (sobre las primeras 10 columnas)_
+```{r sum, exercise = TRUE, exercise.eval=FALSE}
+summary(base[ ,1:10])
+```
+
+###
+#### _Nombre de las variables_
+```{r colname, exercise = TRUE, exercise.eval=FALSE}
+colnames(base)
+```
+
+
+## Tidyverse
+
+Entre los paquetes que componen la librería [Tidyverse](https://www.tidyverse.org/) se encuentran el `dplyr` y `tidyr`, los cuales incluyen un conjunto de herramientas (funciones) para realizar transformaciones sobre nuestro set de datos.
+ 
+Vamos a repasar los contenidos que se vieron en clase, replicando un flujo de trabajo entero y obteniendo lo que será nuestra base de trabajo para futuros ejercicios.
+ 
+A continuación carguemos la librería `tidyverse` a nuestro ambiente. Para ello debe estar previamente instalada en nuestra pc.
+
+```{r libreria, echo=FALSE, message=TRUE, exercise=TRUE, exercise.eval=FALSE}
+#install.packages("tidyverse")
+
+```
+
+```{r libreria-solution}
+library(tidyverse)
+```
+
+_Pista: Recordá que el nombre del paquete cuando lo instalamos con `install.packages()` va entre comillas, no así cuando lo cargamos con `library()`._
+
+###
+
+### Dplyr
+
+Este paquete sirve para poder transformar bases de datos de forma eficiente, sencilla y bastante intuitiva.
+
+Todas las funciones tienen en común la utilización de un caracter: ```%>%```  (llamado _pipe_ , de tubería), que es el que nos va a permitir unir los distintos comandos que queramos ejecutar.
+
+Los ```%>%``` toman el set de datos a su izquierda y los transforman mediante los comandos a su derecha, en los cuales los elementos de la izquierda están implícitos. Es decír, que una vez específicado el objeto con el cual se trabaja (generamente un DataFrame, o sea, una base de datos), no será necesario nombrarlo nuevamente para referirse a una determinada variable/columna del mismo.
+
+Vamos a ir viendo distintas funciones útiles que se encuentran comprendidas en esta librería.
+
+
+## A. Función `select()`
+        
+Esta función permite especificar una serie de variables (columnas) que se desea conservar de una base de datos. También puede definirse por la negativa, esto es, eligiendo las columnas que se desean descartar (anteponiendole el símbolo `-` a la variable o al conjunto de ellas). Esto es de mucha utilidad para optimizar recursos de la computadora y agilizar el trabajo en bases de datos de gran tamaño o al trabajar con varias bases al mismo tiempo.
+
+###
+
+__Por ejemplo:__ si queremos trabajar con una base con sólo las variables de sexo y edad de la población, aplicamos la siguiente sentencia:
+
+```{r col1, exercise = TRUE, exercise.eval = FALSE}
+ejemplo1 <- base %>%
+  select(CH04, CH06)
+```
+
+```{r col1-solution}
+ejemplo1 <- base %>%
+  select(CH04, CH06)
+```
+
+###
+
+_Una forma de chequear que la selección se haya aplicado correctamente es visualizando las columnas que contiene la nueva base con la función `colnames()`._
+_Otra forma es observando los primeros casos de la base y sus variables a través de la función `head()`:_ 
+
+Corramos la función `colnames()` sobre la base `ejemplo1` para poder observar qué columnas contiene la misma, una vez hecha la selección de variables:
+
+```{r col2_1, include=FALSE}
+ejemplo1 <- base %>%
+  select(CH04, CH06)
+```
+
+```{r col2, exercise = TRUE, exercise.eval = FALSE, exercise_setup = "col2_1"}
+
+```
+
+```{r col2-solution}
+colnames(ejemplo1)
+```
+
+###
+
+Ahora corramos la función `head()` para ver las variables y la información en las mismas para las primeras filas:
+```{r col3, exercise = TRUE, exercise.eval = FALSE}
+
+```
+
+```{r col3-solution}
+head(ejemplo1)
+```
+
+###
+
+Ahora probemos quitar la variable `CH06` (edad) y quedarnos unicamente con la `CH04` (sexo). Llamemos al nuevo objeto `ejemplo2`.
+
+```{r sel1, exercise = TRUE, exercise.eval = FALSE}
+
+```
+
+```{r sel1-solution}
+ejemplo2 <- ejemplo1 %>% 
+  select(-CH06)
+
+```
+
+###
+
+Chequeamos la operación:
+
+
+```{r sel1_1}
+ejemplo2 <- ejemplo1 %>% 
+  select(-CH06)
+
+```
+
+```{r sel2, exercise = TRUE, exercise.eval = FALSE, exercise.setup = "sel1_1"}
+
+```
+
+
+
+### Ejercicio 1
+
+Supongamos que conocemos de antemano un listado específico de variables de la base de datos con las cuales vamos a trabajar. Procedamos a quedarnos sólo con las variables de la `base` abajo listadas y asignar esta transformación a una nueva base llamada `ejercicio1`.
+ 
+###
+ 
+__Variables a seleccionar:__ REGION, MAS_500, AGLOMERADO, CH03, CH04, CH06, CH07, CH08,
+CH09, CH15, CH16, NIVEL_ED, ESTADO, CAT_OCUP, PP03D, PP03I, INTENSI, PP07A, P21, T_VI
+ 
+__Nombre de la nueva base:__ ejercicio1
+
+```{r selecciona, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r selecciona-solution}
+ejercicio1 <- base %>% 
+        select(REGION, MAS_500, AGLOMERADO, CH03, CH04, CH06, CH07, CH08,
+CH09, CH15, CH16, NIVEL_ED, ESTADO, CAT_OCUP, PP03D, PP03I, INTENSI, PP07A, P21, T_VI)
+```
+
+### 
+
+¿Con qué función podríamos chequear que la selección se efectuó de manera correcta?
+
+__Nombre de la base:__ ejercicio1
+
+```{r ejer_sel, include=FALSE}
+ejercicio1 <- base %>% 
+        select(REGION, MAS_500, AGLOMERADO, CH03, CH04, CH06, CH07, CH08,
+               CH09, CH15, CH16, NIVEL_ED, ESTADO, CAT_OCUP, PP03D, PP03I, INTENSI, PP07A, P21, T_VI)
+```
+
+```{r selecciona1, exercise=TRUE, exercise.eval = FALSE, exercise_setup = "ejer_sel"}
+
+```
+
+```{r selecciona1-solution}
+colnames(ejercicio1)
+head(ejercicio1)
+```
+
+
+### Ejercicio 2
+
+Ahora procedamos a quedarnos con las primeras 5 columnas de la base de datos. Llamemos a la nueva base como `ejercicio2` y, al finalizar, comprobemos que la selección se hizo correctamente:
+ 
+
+```{r selecciona3, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r selecciona3-solution}
+ejercicio2 <- base %>% 
+        select(1:5)
+
+head(ejercicio2)
+```
+
+## B. Función `filter()`
+
+Esta funnción permite filtrar observaciones (filas) de una base de datos acorde al cumplimiento de condiciones lógicas.
+
+__Ejemplo 1:__ si queremos filtrar a la población mayor de 18 años y menor de 65, aplicariamos la siguiente sentencia:
+        
+```{r}
+ejemplo3 <- base %>% 
+  filter(CH06 >= 18 & CH06 <= 64)
+```
+
+###
+
+_Al estar filtrando por una variable numérica, una forma de chequear que el filtro se haya aplicado correctamente es utilizando la función `summary()`, donde podemos observar los valores mínimo y máximo de la variable_
+
+```{r filter, exercise=TRUE, exercise.eval = FALSE}
+summary(ejemplo3$CH06)
+```
+
+```{r filter-solution}
+summary(ejemplo3$CH06)
+```
+
+###
+
+__Ejemplo 2:__ Supongamos que estamos trabajando el fenómeno de inmigración y queremos caracterizar a la población inmigrante según el país de procedencia.
+
+La EPH permite distinguir a la población según hayan nacido en países limítrofes como no limítrofes. De acuerdo al diseño de registro[^1], la variable que identifica esta característica es la `CH15` (lugar de nacimiento), y los valores de las categorías mencionadas son el 4 __o__ 5. 
+
+Si queremos quedarnos sólo con la población que cumpla la condición de no haber nacido en Argentina, incluyendo tanto a quienes provengan de países limítrofes como no limítrofes, ¿cómo crees que se podría hacer?
+
+__Variable:__ _¿En dónde nació?_ --> `CH15` 
+
+__Categorías:__ 
+
+- 1 = _En esta localidad_
+
+- 2 = _En otra localidad de esta provincia_
+
+- 3 = _En otra provincia (especificar)_
+
+- 4 = _En un país limítrofe (especificar Brasil, Bolivia, Chile, Paraguay, Uruguay)_
+
+- 5 = _En otro país (especificar)_
+
+- 9 = _Ns./Nr._
+
+Llamemos a la nueva base (con el filtro) como `ejemplo3`.
+```{r filter1, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r filter1-solution}
+ejemplo3 <- base %>% 
+  filter(CH15 == 4 | CH15 == 5)
+
+table(ejemplo3$CH15)
+```
+
+[^1]: El [diseño de registro](https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_registro_3t19.pdf) de la EPH.
+
+_Nota:_ Con la función `table()` (que genera una frecuencia simple) podemos chequear si el filtro se aplicó correctamente.
+
+
+### Ejercicio 3
+
+Ahora, de la `base` de trabajo probemos quedarnos sólo con la __población ocupada__ y de __10 o más años de edad__. Guardar esta transformación en un nuevo objeto llamado `ejercicio3`. No olvidemos de chequear que la operación se haya realizado satisfactoriamente.
+
+```{r filtra, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r filtra-solution}
+ejercicio3 <- base %>% 
+  filter(ESTADO == 1 & CH06 >= 10)
+
+table(ejercicio3$ESTADO)
+```
+
+
+## C. Función `mutate()`
+
+Con esta función podemos crear variables en la base de datos. También podemos editar variables ya existentes.
+
+###
+
+__Ejemplo 4:__ Si queremos crear una variable de edad por rangos en función de la variable de edad que ya existe, la sentencia seria la siguiente:
+        
+```{r}
+ejemplo4 <- base %>% 
+  mutate(edad_recod = case_when(CH06 >= 0 & CH06 <= 9 ~ "Menores de 9 años",
+                                CH06 >= 10 & CH06 <= 19 ~ "10 a 19 años",
+                                CH06 >= 20 & CH06 <= 29 ~ "20 a 29 años",
+                                CH06 >= 30 & CH06 <= 39 ~ "30 a 39 años",
+                                CH06 >= 40 & CH06 <= 49 ~ "40 a 49 años",
+                                CH06 >= 50 & CH06 <= 59 ~ "50 a 59 años",
+                                CH06 >= 60              ~ "60 o más años"))
+table(ejemplo4$edad_recod)
+```
+
+###
+
+_Otra forma de chequear las categorías que contiene una variable es a través de la funnción `unique()`, la cual identifica valores únicos de la variable (esto es, cada uno de los valores que aparecen al menos una vez)_
+
+```{r}
+unique(ejemplo4$edad_recod)
+```
+
+### Ejercicio 4
+
+Procedamos a crear una variable llamada `region` (en minúscula), en donde cada categoría se corresponda ya no al valor puntual que aparece en la base sino a su etiqueta equivalente en la variable `REGION` (por ejemplo, el código _1_ corresponde a la etiqueta _"Gran Buenos Aires"_). Asignemos esta operacióna a un nuevo objeto llamado `ejercicio4`:
+
+Según el [diseño de registro](https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_registro_3t19.pdf) de la EPH, las etiquetas de los valores para la variable región son las siguientes:
+
+__Variable:__ REGION
+
+-  1 = Gran Buenos Aires
+- 40 = NOA
+- 41 = NEA
+- 42 = Cuyo
+- 43 = Pampeana
+- 44 = Patagónica
+
+  
+
+```{r crea_col, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r crea_col-solution}
+ejercicio4 <- base %>% 
+  mutate(region = case_when(REGION == 1  ~ "Gran Buenos Aires",
+                            REGION == 40 ~ "NOA",
+                            REGION == 41 ~ "NEA",
+                            REGION == 42 ~ "Cuyo",
+                            REGION == 43 ~ "Pampeana",
+                            REGION == 44 ~ "Patagónica"))
+
+unique(ejercicio4$region)
+```
+
+
+## D. Función `summarize()`
+
+La misma crea una salida con el producto de alguna operación de resúmen (suma, resta, promedio, máximo, mínimo, desvío estandar)
+
+###
+
+__Ejemplo 5:__ Si queremos un objeto que contenga la información agregada de alguna (o algunas) variable(s), como puede ser el promedio de edad de la población, aplicamos la siguiente sentencia:
+        
+```{r}
+base %>% 
+  summarise(edad_promedio = mean(CH06, na.rm = TRUE))
+```
+
+
+### Ejercicio 5
+
+Calculemos la edad promedio de la población ocupada-asalariada y el ingreso que perciben por su ocupación principal. Asignemos esta operacióna a un nuevo objeto llamado `ejercicio5`:
+
+__Variables__:
+
+- _Edad:_ `CH06`
+- _Condición de actividad: Ocupado_ `ESTADO` == 1
+- _Categoría ocupacional: Asalariado_ `CAT_OCUP` == 3
+- _Ingreso de la Ocupacón principal:_ `P21`
+
+
+```{r summarise, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r summarise-solution}
+summary(base$CH06)
+ejercicio5 <- base %>% 
+  filter(ESTADO == 1 & CAT_OCUP == 3 & P21 > 0) %>% 
+  summarise(edad_promedio = weighted.mean(CH06, PONDERA, na.rm = TRUE),
+            ingreso_medio = weighted.mean(P21, PONDERA,  na.rm = TRUE))
+```
+
+###
+
+Revisemos el contenido  del nuevo objeto creado:
+
+```{r summarise1, exercise=TRUE, exercise.eval = FALSE}
+ejercicio5
+```
+
+```{r summarise1-solution}
+ejercicio5
+```
+
+## E. Función `group_by()`
+
+Esta función permite realizar operaciones de forma agrupada para cada uno de los valores de la categoría de la variable de agrupamiento. Lo que hace la función es “separar” a la tabla según estas categorías de la variable indicada y realizar las operaciones que se especifican a continuación, de manera independiente, para cada una de las “subtablas”:
+
+###
+
+__Ejemplo 6:__ Si queremos el mismo cálculo de estimación del promedio de edad pero, esta vez, para cada categoría de la variable sexo, aplicamos la siguiente sentencia:
+        
+```{r}
+ejemplo6 <- base %>% 
+  group_by(CH04) %>% 
+  summarise(edad_promedio = mean(CH06, na.rm = TRUE))
+```
+
+###
+
+_Veamos lo que contiene el nuevo objeto creado:_
+
+```{r}
+ejemplo6
+```
+
+### Ejercicio 6
+
+Procedamos a calcular el ingreso medio por la ocupación principal (variable `P21`) de la población ocupada por cada una de las categorías de la ocupación. En otras palabras: ¿Cuánto cobran, en promedio, los ocupados patrones, los cuentapropistas y los asalariados?. Asignemos esta operacióna un nuevo objeto llamado `ejercicio6`:
+
+__Variables__:
+
+- _Condición de actividad: Ocupado_ --> `ESTADO` == 1.
+
+- _Categoría ocupacional: Asalariado_ --> `CAT_OCUP`.
+
+- _Ingreso de la Ocupacón principal:_ --> `P21`.
+
+__Nombre de la nueva base:__ `ejercicio6`.
+
+_Nota: Recordá que, antes de proceder con los cálculos, es aconsejable revisar el contenido de las variables implicadas con funciones como `summary`._
+
+```{r agrup, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{r agrup-solution}
+ejercicio6 <- base %>% 
+  filter(ESTADO == 1 & P21 > 0) %>% 
+  group_by(CAT_OCUP) %>% 
+  summarise(ingreso_medio = mean(P21, na.rm = TRUE))
+```
+
+
+###
+
+Revisemos el contenido  del nuevo objeto creado:
+
+```{r agrup1, exercise=TRUE, exercise.eval = FALSE}
+ejercicio6
+```
+
+```{r agrup1-solution}
+ejercicio6
+```
+
+

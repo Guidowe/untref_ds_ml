@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a Tidyverse</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducción a Tidyverse
+
+---
+
+
+
+
+
+
+class: middle, center
+
+# ¿Qué es [Tidyverse](https://www.tidyverse.org/)?
+
+---
+class: middle, center
+
+#### `Tidyverse` es una colección de paquetes de R, diseñados para la ciencia de datos. 
+ 
+#### Todos los paquetes comparten una filosofía de diseño, gramática y estructuras de datos subyacentes.
+
+&lt;img src="img/tidyverse.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+class: middle, center
+
+## Caja de herramientas
+
+* El objetivo principal de sus paquetes y funciones es la de proveer herramientas para facilitar las tareas típicas de la ciencia de datos:
+
+&lt;img src="img/circuito del dato.png" width="110%" style="display: block; margin: auto;" /&gt;
+
+---
+class: middle, center
+
+# ¿Por qué `tidyverse`?
+
+---
+
+### __¿Por qué tidyverse?__
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
+
+- __Es más simple de leer y de escribir para seres humanos__
+
+&lt;br&gt;
+
+- __Sus paquetes y funciones tienen un esquema en común. Por ejemplo, el primer parámetro de cualquier función es siempre la base de datos -o data.frame-__
+
+&lt;br&gt;
+
+- __La comunidad, basada en los principios del codigo abierto y trabajo colaborativo__
+
+
+---
+### __Instalación y uso__
+
+* Sólo una vez (por computadora):
+```r
+install.packages("tidyverse")
+```
+
+* En cada inicio de sesión de R o Rstudio:
+
+```r
+library(tidyverse)
+```
+ 
+--
+
+_No es necesario esto:_
+
+```r
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("ggplot2")
+```
+
+--
+
+_Ni esto:_
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+---
+class: middle, center, inverse
+
+&lt;img src="img/logo dplyr.png" width="50%" style="display: block; margin: auto;" /&gt;
+  
+---
+## Funciones del paquete dplyr:
+
+|Función |Acción |
+| :--- | ---:   |
+| `select()`    | *selecciona o descarta variables*|
+| `filter()`    | *selecciona filas*|
+| `mutate()`    | *crea nuevas variables*|
+| `group_by()`  | *segmenta en funcion de una variable*|
+| `summarize()` | *genera una tabla de resúmen*|
+| `case_when()` | *se usa generalmente en `mutate()`, para recodificar*|
+| `rename()`    | *renombra variables*|
+
+---
+class: middle, center
+
+# __select()__
+***
+#### _Elije o descarta columnas de una base de datos_
+
+---
+### Función _`select()`_
+
+&lt;br&gt;
+
+- Por la positiva:
+```r
+select(base_de_datos, 
+       columna1, columna2, columna...x)
+```
+
+&lt;br&gt;
+
+- Por la negativa (`-`):
+```r
+select(base_de_datos, 
+       -columna1, -columna2, -columna...x)
+```
+
+---
+#### Función _`select()`_
+
+Importemos una base de datos:
+
+```r
+base &lt;- read.table(file = "../data/base_juguete_t3_16.txt", sep = "|")
+```
+
+
+```r
+colnames(base)
+```
+
+```
+    [1] "CODUSU"     "ANO4"       "TRIMESTRE"  "NRO_HOGAR"  "COMPONENTE"
+    [6] "H15"        "REGION"     "MAS_500"    "AGLOMERADO" "PONDERA"   
+   [11] "CH03"       "CH04"       "CH05"       "CH06"       "CH07"      
+   [16] "CH08"       "CH09"       "CH10"       "CH11"       "CH12"      
+   [21] "CH13"       "CH14"       "CH15"       "CH15_COD"   "CH16"      
+   [26] "CH16_COD"   "NIVEL_ED"   "ESTADO"     "CAT_OCUP"   "CAT_INAC"  
+   [31] "IMPUTA"     "PP02C1"     "PP02C2"     "PP02C3"     "PP02C4"    
+   [36] "PP02C5"     "PP02C6"     "PP02C7"     "PP02C8"     "PP02E"     
+   [41] "PP02H"      "PP02I"      "PP03C"      "PP03D"      "PP3E_TOT"  
+   [46] "PP3F_TOT"   "PP03G"      "PP03H"      "PP03I"      "PP03J"     
+   [51] "INTENSI"    "PP04A"      "PP04B_COD"  "PP04B1"     "PP04B2"    
+   [56] "PP04B3_MES" "PP04B3_ANO" "PP04B3_DIA" "PP04C"      "PP04C99"   
+   [61] "PP04D_COD"  "PP04G"      "PP05B2_MES" "PP05B2_ANO" "PP05B2_DIA"
+   [66] "PP05C_1"    "PP05C_2"    "PP05C_3"    "PP05E"      "PP05F"     
+   [71] "PP05H"      "PP06A"      "PP06C"      "PP06D"      "PP06E"     
+   [76] "PP06H"      "PP07A"      "PP07C"      "PP07D"      "PP07E"     
+   [81] "PP07F1"     "PP07F2"     "PP07F3"     "PP07F4"     "PP07F5"    
+   [86] "PP07G1"     "PP07G2"     "PP07G3"     "PP07G4"     "PP07G_59"  
+   [91] "PP07H"      "PP07I"      "PP07J"      "PP07K"      "PP08D1"    
+   [96] "PP08D4"     "PP08F1"     "PP08F2"     "PP08J1"     "PP08J2"    
+   [ reached getOption("max.print") -- omitted 77 entries ]
+```
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+       CODUSU ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15 REGION MAS_500 AGLOMERADO
+       PONDERA CH03 CH04 CH05 CH06 CH07 CH08 CH09 CH10 CH11 CH12 CH13 CH14 CH15
+       CH15_COD CH16 CH16_COD NIVEL_ED ESTADO CAT_OCUP CAT_INAC IMPUTA PP02C1
+       PP02C2 PP02C3 PP02C4 PP02C5 PP02C6 PP02C7 PP02C8 PP02E PP02H PP02I PP03C
+       PP03D PP3E_TOT PP3F_TOT PP03G PP03H PP03I PP03J INTENSI PP04A PP04B_COD
+       PP04B1 PP04B2 PP04B3_MES PP04B3_ANO PP04B3_DIA PP04C PP04C99 PP04D_COD
+       PP04G PP05B2_MES PP05B2_ANO PP05B2_DIA PP05C_1 PP05C_2 PP05C_3 PP05E PP05F
+       PP05H PP06A PP06C PP06D PP06E PP06H PP07A PP07C PP07D PP07E PP07F1 PP07F2
+       PP07F3 PP07F4 PP07F5 PP07G1 PP07G2 PP07G3 PP07G4 PP07G_59 PP07H PP07I
+       PP07J PP07K PP08D1 PP08D4 PP08F1 PP08F2 PP08J1 PP08J2 PP08J3 PP09A
+       PP09A_ESP PP09B PP09C PP09C_ESP PP10A PP10C PP10D PP10E PP11A PP11B_COD
+       PP11B1 PP11B2_MES PP11B2_ANO PP11B2_DIA PP11C PP11C99 PP11D_COD PP11G_ANO
+       PP11G_MES PP11G_DIA PP11L PP11L1 PP11M PP11N PP11O PP11P PP11Q PP11R PP11S
+       PP11T P21 DECOCUR IDECOCUR RDECOCUR GDECOCUR PDECOCUR ADECOCUR PONDIIO
+       TOT_P12 P47T DECINDR IDECINDR RDECINDR GDECINDR PDECINDR ADECINDR PONDII
+       V2_M V3_M V4_M V5_M V8_M V9_M V10_M V11_M V12_M V18_M V19_AM V21_M T_VI
+       ITF DECIFR IDECIFR RDECIFR GDECIFR PDECIFR ADECIFR IPCF DECCFR IDECCFR
+       RDECCFR GDECCFR PDECCFR ADECCFR PONDIH
+   [ reached 'max' / getOption("max.print") -- omitted 2000 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(CODUSU, ESTADO, CAT_OCUP, )
+```
+]]
+.column[.content[
+
+```
+                            CODUSU ESTADO CAT_OCUP
+  1  TQSMNORTUHJOOPCDEIJAH00482615      4        0
+  2  TQRMNOQXSHMKMPCDEIIAD00494796      3        0
+  3  TQRMNOPWSHLLKRCDEOJAH00487512      4        0
+  4  TQRMNOSVUHMMPPCDEIJAH00496251      2        3
+  5  TQRMNORXUHJMLUCDEFIAH00469135      2        0
+  6  TQRMNOQUTHJOKRCDEGOIH00476207      4        0
+  7  TQRMNOPQQHJLLMCDEGKDB00475296      3        0
+  8  TQRMNOQVPHJMPQCDEIJAH00483850      3        0
+  9  TQRMNORSWHJMKNCDEFKID00470001      3        0
+  10 TQRMNOQTVHKOKNCDEFLID00488733      1        3
+  11 TQRMNOSVSHLMKSCDEGLDF00475744      3        0
+  12 TQRMNOSTXHMOKMCDEGOIH00491730      3        0
+  13 TQRMNORXPHKKKMCDEGLDF00491119      3        0
+  14 TQRMNORVSHMMQTCDEIJAH00495312      3        0
+  15 TQRMNORUPHKOLMCDEGIBJ00490200      3        0
+  16 TQRMNOSQSHMMLOCDEFIAH00487680      3        0
+  17 TQRMNORSVHJMLLCDEOHCH00486797      1        1
+  18 TQRMNORUYHLOLQCDEFOCD00472638      1        3
+  19 TQRMNOQQTHKKTQCDEIJAH00495287      4        0
+  20 TQRMNOQXYHLMLMCDEGLDF00491193      3        0
+  21 TQRMNOQYRHMMMPCDEGJBF00490782      3        0
+  22 TQRMNOPQVHMMKQCDEIOAH00497389      3        0
+  23 TQRMNOQYWHMMLMCDEOJAH00497762      3        0
+  24 TQRMNORPWHMKKRCDEFOCD00489422      1        1
+  25 TQRMNORSVHLLKRCDEGPDJ00476665      1        3
+  26 TQSMNORQUHJMLMCDEIOAH00497218      3        0
+  27 TQSMNOQXPHLMKMCDEIKAH00496782      1        2
+  28 TQRMNOPTTHJMKMCDEFKID00469990      3        0
+  29 TQRMNOPUUHLKKUCDEHPJB00480763      1        1
+  30 TQRMNORRTHJLKNCDEHIBB00477821      3        0
+  31 TQRMNOPSPHLMMSCDEIJAH00496059      1        3
+  32 TQRMNORTVHJLLNCDEGOIH00476151      1        3
+  33 TQRMNORUWHLKKUCDEIIAD00494825      1        3
+   [ reached 'max' / getOption("max.print") -- omitted 1967 rows ]
+```
+]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
