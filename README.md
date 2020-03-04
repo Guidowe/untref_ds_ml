@@ -1,4 +1,4 @@
-# Materiales del curso Ciencia de Datos y Machine Learning. Aplicaciones en R
+﻿# Materiales del curso Ciencia de Datos y Machine Learning. Aplicaciones en R
 
 > Docentes: Germán Rosati - Pablo Tiscornia - Guido Weksler
 
@@ -48,4 +48,35 @@ __Clase 3 - Visualización de la información__
 
 [![](img/Download.png)](Clase 3 - Graficos.rar)
 
+
 <br>
+
+# Librerías a utilizar
+El taller se desarrollará en R y se hará un uso extensivo de las siguientes librerías:
+
+- `tidyverse`
+- `caret`
+- `eph`
+- `openxlsx`
+- `ggridges`
+- `ggthemes`
+
+Pueden instalarse utilizando las instrucciones:
+
+```{r}
+install.packages('tidyverse')  
+install.packages('caret') 
+```
+
+
+# Bibliografía básica y sitios de consulta
+
+- [James, G., Witten, D., Hastie, T. y Tibshirani, R. (2015), _Introduction to Statistical Learning_, Berlin: Springer.](http://faculty.marshall.usc.edu/gareth-james/ISL/)
+
+- [Kuhn, M. (s/f), _The `caret` package](http://topepo.github.io/caret/index.html)
+
+- [Grolemund, G. y Wickham, H. (2019), R para Ciencia de Datos](https://es.r4ds.hadley.nz)
+
+- [Molnar, C. (2019) Interpretable Machine Learning. A Guide for Making Black Box Explainable](https://christophm.github.io/interpretable-ml-book/)
+
+- [Vázquez Brust, A. (2019), Ciencia de Datos para Gente Sociable](https://bitsandbricks.github.io/ciencia_de_datos_gente_sociable/)
