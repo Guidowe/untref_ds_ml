@@ -58,8 +58,9 @@ El taller se desarrollará en R y se hará un uso extensivo de las siguientes li
 - `caret`
 - `eph`
 - `openxlsx`
-- `ggridges`
 - `ggthemes`
+- `ggridges`
+- `GGally`
 
 Pueden instalarse utilizando las instrucciones:
 
