@@ -1,4 +1,4 @@
-﻿# Materiales del curso Ciencia de Datos y Machine Learning. Aplicaciones en R
+# Materiales del curso Ciencia de Datos y Machine Learning. Aplicaciones en R
 
 > Docentes: Germán Rosati - Pablo Tiscornia - Guido Weksler
 
@@ -33,6 +33,22 @@ __Clase 1 - Introducción a R Base:__
  - Descarga de materiales clase 1
 
 [![](img/Download.png)](Clase 1 - R Base.rar)
+
+<br>
+
+__Clase 2 - Introducción a Tidyverse:__
+  
+
++ Temas de clase: 
+  + Paquetes y librerías
+  + Presentación del paquete Tidyverse:
+    + Paquete dplyr: Principales herramientas para el tratamiento del dato
+    + Paquete tidyr: Re-estructuración de tablas y bases de datos
+    + Operaciones segmentadas y tablas resúmenes
+  
+ - Descarga de materiales clase 2
+
+[![](img/Download.png)](Clase 2 - Tidyverse.rar)
 
 <br>
 

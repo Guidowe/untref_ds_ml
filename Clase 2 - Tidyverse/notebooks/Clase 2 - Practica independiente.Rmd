@@ -1,0 +1,154 @@
+---
+title: "Ciencia de Datos y Machine Learning. Aplicaciones en R"
+subtitle: "Clase 2 - Práctica independiente"
+output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+<br>
+
+## Ejercicios:
+
+<br>
+
+
+En primer lugar, cargamos la librería que usaremos para trabajar 
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+<br>
+
+### Carga de Información
+
+La función __list.files__ nos permite observar los archivos que contiene una determinada carpeta             
+
+```{r eval=FALSE, include=FALSE}
+list.files("data/")
+```
+
+<br>
+
+### **Ejercicio 1** - Cargamos la base de datos
+
+1.1.Levantar la base individual llamada `Individual_t215`:
+
+```{r}
+
+
+```
+
+<br>
+
+### **Ejercicio 2** - Conociendo los datos
+
+2.1. Obtener la estructura básica de nuestro dataframe.
+
+```{r}
+
+```
+
+<br>
+
+2.2. Obtener los estadísticos principales de la distribución del ingreso de la ocupación principal:
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+<br>
+
+2.3. Sacar la frecuencia simple de la variable ESTADO:
+
+```{r}
+
+```
+
+<br>
+
+
+### **Ejercicio 3** - Transformaciones de la base de datos
+
+
+3.1. Filtrar la base de datos para quedarnos solo con las observaciones del `aglomerado 32` y guardarlo en un objeto que se llame **base_caba**
+
+```{r}
+
+```
+
+<br>
+
+3.2. Cambiar el nombre de la variable `P21` por `ingreso_OP` y guardarlo en la misma base de datos.
+
+```{r}
+
+
+```
+
+<br>
+
+3.3. Crear una nueva variable "ingreso_horario" que sea el ingreso por hora de la ocupación principal (P21/PP3E_TOT) y guardarlo en la misma base de datos.
+
+```{r}
+
+```
+
+<br>
+
+3.4. Crear una variable _nivel_ed2_ que agrupe los niveles educativos de la variable existente `NIVEL_ED` en las siguientes categorías nuevas:
+
+* 1 - Sin educación, primaria incompleta, o Ns.Nr.
+* 2 - Hasta secundaria incompleta
+* 3 - Hasta universitaria incompleta
+* 4 - Universitaria completa
+
+Guardar la operación en la misma base de datos.
+
+```{r}
+
+
+```
+
+<br>
+
+3.5. Quedarnos solo con las siguientes variables de la base de datos:
+
+ANO4, TRIMESTRE, REGION, AGLOMERADO, ESTADO, PONDERA
+
+y guardarlo en un nuevo objeto llamado **recorte**.
+
+```{r}
+
+
+```
+
+<br>
+
+3.6. Ordenar los datos del recorte anterior por `REGION` y `ESTADO`.
+
+```{r}
+
+
+```
+
+<br>
+
+3.9. Crear una tabla llamada **tasas** que me de la información del total de población, el total de  ocupados, el total de desocupados, de la PEA (ocupados + desocupados) y calcular la tasa de actividad, empleo y desocupación.
+
+- Tasa de actividad:  $\frac{PEA}{Poblacion}$ 
+
+- Tasa de desocupacion:  $\frac{Desocupados}{PEA}$ 
+
+
+```{r}
+
+
+```

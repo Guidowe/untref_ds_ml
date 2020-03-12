@@ -24,7 +24,7 @@
 body {
   font-family: Montserrat, 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
   font-weight: 300;
-  color: #13393A;
+  color: black;
 }
 h1, h2, h3 {
   font-family: Josefin Sans;
@@ -33,7 +33,7 @@ h1, h2, h3 {
 }
 .remark-slide-content {
   background-color: #E8EDED;
-  font-size: 20px;
+  font-size: .6cm;
   
   
   
@@ -52,7 +52,7 @@ h1, h2, h3 {
   font-family: Droid Mono, 'Lucida Console', Monaco, monospace;
 }
 .remark-code {
-  font-size: 0.9em;
+  font-size: .6cm;
 }
 .remark-inline-code {
   font-size: 1em;
@@ -65,7 +65,7 @@ h1, h2, h3 {
   opacity: 1;
   font-size: 0.9em;
 }
-strong{color:#1c5253;}
+strong{color:TRUE;}
 a, a > code {
   color: #1c5253;
   text-decoration: none;
@@ -145,7 +145,7 @@ th, td { padding: 5px; }
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) { background: #D1DCDC }
 table.dataTable tbody {
   background-color: #E8EDED;
-  color: #13393A;
+  color: black;
 }
 table.dataTable.display tbody tr.odd {
   background-color: #E8EDED;
@@ -157,10 +157,10 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.5);
 }
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
-  color: #13393A;
+  color: black;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-  color: #13393A !important;
+  color: black !important;
 }
 
 @page { margin: 0; }

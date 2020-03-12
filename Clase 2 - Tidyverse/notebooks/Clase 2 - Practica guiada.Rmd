@@ -1,0 +1,172 @@
+---
+title: "Ciencia de Datos y Machine Learning. Aplicaciones en R"
+subtitle: "Clase 3 - Tidyverse - Práctica guiada"
+output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  html_document:
+    self_contained: no
+    toc: yes
+---
+
+<br> 
+
+> Reiniciar R
+
+
+## Introducción
+
+Esta es una práctica guiada para empezar a usar las herramientas del paquete [Tidyverse](https://www.tidyverse.org/).
+
+En esta sección vamos a ejercitar el uso de las siguientes funciones:
+
+  - `selec()`: Selecciona o descarta variables (columnas) de interés de una base de datos.
+  - `filter()`: Filtra observaciones (filas) en función de algún criterio o condición.
+  - `mutate()`: Crea variables nuevas (columnas).
+  - `summarise()`: Genera valores de forma resumida, en función de alguna operación (suma, multiplicación, etc.).
+  - `group_by()`: Cambia el alcance de cada función para que trabaje sobre conjuntos de casos específicos, en base a alguna variable y sus categorías.
+  - `%>%`: _Pipe_ (de tubería) encadena un conjunto de operaciones.
+<br> 
+
+***
+
+<br>
+
+
+- __Objetivo:__ En función de la base `Individual_t215.txt` de la EPH (base original), replicar la base de datos llamada `EPH_2015_II.RDS` (base final), ambas ubicadas en la carpeta `\data` del proyecto.
+
+- Para todos los ejercicios, corroborar con las funciones que vimos en clase que las transformaciones se hayan realizado correctamente.
+
+<br><br>
+
+*** 
+<br> 
+
+#### 1. Importar la base de datos
+```{r}
+# Base "origianl":
+
+
+# Base "final":
+
+```
+<br>
+
+
+#### 1.1. Cargar la librería con la que se va a trabajar (asumiendo que ya está instalada en la computadora):
+
+```{r echo=TRUE}
+
+
+```
+<br>
+
+
+#### 2. Quedarse sólo con la población __ocupada__ de la base de datos.
+
+_Pista:_ _La variable que identifica la condición de actividad de las personas se llama `ESTADO` (ver el diseño de registro para identificar el código correspondiente)_
+
+```{r}
+
+
+```
+<br>
+
+
+#### 2.1. Observar qué variables contiene la base "original":
+
+```{r echo=TRUE}
+
+
+```
+<br>
+
+
+#### 2.2. Observar qué variables contiene la base base "final":
+```{r}
+
+
+```
+<br>
+
+
+
+#### 2.3. Quedarnos en la `base_cruda` sólo con las siguientes variables:
+
+```{r}
+variables <- c("REGION", "MAS_500", "AGLOMERADO", "CH03", "CH04", "CH06", "CH07", "CH08", "CH09", 
+               "CH15", "CH16", "NIVEL_ED", "CAT_OCUP", "PP03D", "PP3E_TOT", "PP3F_TOT", "PP03I",
+               "PP04D_COD", "INTENSI", "PP07A", "PP07H", "PP07I", "P21", "T_VI", "IDIMPP")
+
+base_cruda <- base_cruda %>% 
+  select(variables)
+```
+<br>
+
+
+
+#### 3.1. Crear la variable de aporte a la seguridad social. Esta variable registra las siguientes situaciones:
+
+- Si tiene descuento jubilatorio por su trabajo: _"Tiene aportes"_ - `PP07H == 1`
+
+- Si aporta por sí mismo a un sistema jubilatorio: _"Aporta por sí mismo"_ `PP07I == 1`
+
+- Si no aporta ni le hacen descuento jubilatorio: _"No tiene aportes"_ `PP07H == 2 & PP07I == 2`
+
+```{r}
+
+mean(base_cruda$PP3E_TOT, na.rm = T)
+mean(base_cruda$PP3F_TOT, na.rm = T)
+```
+<br>
+
+
+#### 3.2. Crear la variable `htot` (_Total de horas trabajadas_), como la suma de las variables `PP3E_TOT` (horas trabajadas en la ocupación principal) y la `PP3F_TOT` (horas trabajadas en las demás ocupaciones).
+
+```{r}
+
+
+```
+<br>
+
+
+
+#### 3.3. Crear la variable de calificación ocupacional (`calif` en la base final).
+
+```{r}
+base_cruda <- base_cruda %>%
+  mutate(PP04D_COD    = as.character(PP04D_COD), # Transforma la variable a caracter
+         CLASIF_CNO   = str_pad(PP04D_COD, 5, side = 'left', pad = '0'), # Rellena con 0 valores con digitos < 5
+         calificacion = substr(CLASIF_CNO, 5, 5),  # Se queda con el 5to digito unicamente
+         calificacion = case_when(calificacion == 1 ~ "Profesional",  # Etiquetas
+                                  calificacion == 2 ~ "Tecnico",
+                                  calificacion == 3 ~ "Operativo",
+                                  calificacion == 4 ~ "No calificado",
+                                  calificacion == 9 ~ "Calif. ign.")) %>% 
+  select(-c(PP04D_COD, CLASIF_CNO))
+
+table(base_cruda$calificacion)
+```
+<br>
+
+
+
+#### 3.4. Crear la variable de marca de imputación (`imp_inglab1`)
+```{r}
+base <- base_cruda %>%
+        mutate(IDIMPP     = as.character(IDIMPP), # Transforma la variable a caracter
+               imputacion = str_pad(IDIMPP, 5, side = 'left', pad = '0'), # Rellena con 0 valores con digitos < 5
+               digito1    = substr(imputacion, 1, 1), 
+               digito2    = substr(imputacion, 2, 2), 
+               digito3    = substr(imputacion, 3, 3), 
+               digito4    = substr(imputacion, 4, 4), 
+               digito5    = substr(imputacion, 5, 5), 
+               imp_inglab1 = case_when(digito1 > 0 ~ 1,
+                                       digito2 > 0 ~ 1,
+                                       digito3 > 0 ~ 1,
+                                       digito5 > 0 ~ 1,
+                                       TRUE        ~ 0)) %>% 
+  select(-c(digito1:digito5))
+```
+

@@ -19,6 +19,7 @@ class: center, middle, inverse, title-slide
 
 
 
+
 class: middle, center
 
 # ¿Qué es un paquete?
@@ -72,7 +73,7 @@ class: middle, center
  
 #### Todos los paquetes comparten una filosofía de diseño, gramática y estructuras de datos subyacentes.
 
-&lt;img src="img/tidyverse.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/tidyverse.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 class: middle, center
@@ -81,7 +82,7 @@ class: middle, center
 
 * El objetivo principal de sus paquetes y funciones es la de proveer herramientas para facilitar las tareas típicas de la ciencia de datos:
 
-&lt;img src="img/circuito del dato.png" width="110%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/circuito del dato.png" width="80%" style="display: block; margin: auto;" /&gt;
 
   
 ---
@@ -148,32 +149,27 @@ class: middle, center, inverse
 
 ---
 
-* Para calcular el promedio del ingreso por la ocupación principal (P21), en R base se hace así:
+* Para calcular el promedio del ingreso por la ocupación principal (P21), en R base:
 
 ```r
-mean(x = base$P21)
+ingreso_medio &lt;- mean(base$P21)
 ```
-
-```
-  [1] 2901.309
-```
-&lt;br&gt;
+  
 --
 
-* Si queremos redondear el resultado de la operación anterior:
+* Si queremos redondear el resultado de la operación anterior, podemos probar agregar a la sentencia la función `round()`
 
 ```r
-round(x = mean(x = base$P21), 
-      digits = 1)
+round(ingreso_medio, digits = 1)
 ```
 
 ```
   [1] 2901.3
 ```
-&lt;br&gt;
+
 --
 
-* Con `tidyverse` se hace más inteligible, transformando en secuencia _izquierda / derecha_ el conjunto de operaciones, en vez de _adentro / afuera_:
+* Con el esquema `tidyverse` se haría de la siguiente forma:
 
 ```r
 base$P21 %&gt;%
@@ -185,9 +181,13 @@ base$P21 %&gt;%
   [1] 2901.3
 ```
 
+--
+
+La idea detrás es hacerlo más "humano", transformando en secuencia de _adentro / afuera_ a uno parecido al de la lectura, o sea, de _izquierda / derecha_ o _arriba / abajo_
+
 ---
 class: middle, center, inverse
-
+  
 &lt;img src="img/logo dplyr.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
@@ -199,7 +199,7 @@ class: middle, center, inverse
 | :---          | ---:   |
 | `select()`    | *selecciona o descarta variables*|
 | `filter()`    | *selecciona filas*|
-| `mutate()`    | *crea nuevas variables*|
+| `mutate()`    | *crea / edita variables*|
 | `rename()`    | *renombra variables*|
 | `group_by()`  | *segmenta en funcion de una variable*|
 | `summarize()` | *genera una tabla de resúmen*|
@@ -213,38 +213,28 @@ class: middle, center
 #### _Elije o descarta columnas de una base de datos_
 
 ---
-### Función _`select()`_
-&lt;br&gt;
+class: middle, center
 
-- Con R base:
-```r
-subset(x = base_de_datos, 
-       select = c(columna1, columna2, columna...x))
+La función tiene el siguiente esquema:
+```r 
+select(base_de_datos,
+    columna1, columna2, columna...x)
 ```
 &lt;br&gt;
 
---
-
-- Con `tidyverse`, por la positiva:
+O, lo que es lo mismo:
 ```r
-select(base_de_datos, 
-       columna1, columna2, columna...x)
+base_de_datos %&gt;% 
+    select(columna1, columna2, columna...x)
 ```
 &lt;br&gt;
 
---
-
-- Con `tidyverse`, por la negativa:
-```r
-select(base_de_datos, 
-       -columna1, -columna2, -columna...x)
-```
+_Más adelante vamos a ver cómo funciona mejor el uso del ` %&gt;% `_
 
 ---
-#### Función _`select()`_
 &lt;br&gt;
 
-Importemos una base de datos (ubicada en la carpeta `data` de la clase):
+Importamos una base de datos (ubicada en la carpeta `data` de la clase):
 
 ```r
 base &lt;- read.table(file = "../data/base_juguete_t3_16.txt", sep = "|")
@@ -253,7 +243,7 @@ base &lt;- read.table(file = "../data/base_juguete_t3_16.txt", sep = "|")
 --
 &lt;br&gt;
 
-Usemos la función `colnames()` para ver qué variables (columnas) contiene el objeto `base`:
+Usamos la función `colnames()` para ver qué variables (columnas) contiene el objeto llamado `base`:
 
 ```r
 colnames(base)
@@ -266,8 +256,7 @@ colnames(base)
 
 ---
 
-#### Función _`select()`_
-
+&lt;br&gt;&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 
 Supongamos que queremos trabajar sólo con las siguientes variables, según el diseño de registro de la EPH:
@@ -295,25 +284,18 @@ count: false
 .column[.content[
 
 ```
-       CODUSU ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15 REGION MAS_500 AGLOMERADO
-       PONDERA CH03 CH04 CH05 CH06 CH07 CH08 CH09 CH10 CH11 CH12 CH13 CH14 CH15
-       CH15_COD CH16 CH16_COD NIVEL_ED ESTADO CAT_OCUP CAT_INAC IMPUTA PP02C1
-       PP02C2 PP02C3 PP02C4 PP02C5 PP02C6 PP02C7 PP02C8 PP02E PP02H PP02I PP03C
-       PP03D PP3E_TOT PP3F_TOT PP03G PP03H PP03I PP03J INTENSI PP04A PP04B_COD
-       PP04B1 PP04B2 PP04B3_MES PP04B3_ANO PP04B3_DIA PP04C PP04C99 PP04D_COD
-       PP04G PP05B2_MES PP05B2_ANO PP05B2_DIA PP05C_1 PP05C_2 PP05C_3 PP05E PP05F
-       PP05H PP06A PP06C PP06D PP06E PP06H PP07A PP07C PP07D PP07E PP07F1 PP07F2
-       PP07F3 PP07F4 PP07F5 PP07G1 PP07G2 PP07G3 PP07G4 PP07G_59 PP07H PP07I
-       PP07J PP07K PP08D1 PP08D4 PP08F1 PP08F2 PP08J1 PP08J2 PP08J3 PP09A
-       PP09A_ESP PP09B PP09C PP09C_ESP PP10A PP10C PP10D PP10E PP11A PP11B_COD
-       PP11B1 PP11B2_MES PP11B2_ANO PP11B2_DIA PP11C PP11C99 PP11D_COD PP11G_ANO
-       PP11G_MES PP11G_DIA PP11L PP11L1 PP11M PP11N PP11O PP11P PP11Q PP11R PP11S
-       PP11T P21 DECOCUR IDECOCUR RDECOCUR GDECOCUR PDECOCUR ADECOCUR PONDIIO
-       TOT_P12 P47T DECINDR IDECINDR RDECINDR GDECINDR PDECINDR ADECINDR PONDII
-       V2_M V3_M V4_M V5_M V8_M V9_M V10_M V11_M V12_M V18_M V19_AM V21_M T_VI
-       ITF DECIFR IDECIFR RDECIFR GDECIFR PDECIFR ADECIFR IPCF DECCFR IDECCFR
-       RDECCFR GDECCFR PDECCFR ADECCFR PONDIH
-   [ reached 'max' / getOption("max.print") -- omitted 2000 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
 ]]
 ---
@@ -330,32 +312,32 @@ base %&gt;%
 
 ```
      ANO4 TRIMESTRE ESTADO CAT_OCUP
-  1  2016         3      4        0
-  2  2016         3      3        0
-  3  2016         3      4        0
-  4  2016         3      2        3
-  5  2016         3      2        0
-  6  2016         3      4        0
-  7  2016         3      3        0
-  8  2016         3      3        0
-  9  2016         3      3        0
-  10 2016         3      1        3
-  11 2016         3      3        0
-  12 2016         3      3        0
-  13 2016         3      3        0
-  14 2016         3      3        0
-  15 2016         3      3        0
-  16 2016         3      3        0
-  17 2016         3      1        1
-  18 2016         3      1        3
-  19 2016         3      4        0
-  20 2016         3      3        0
-  21 2016         3      3        0
-  22 2016         3      3        0
-  23 2016         3      3        0
-  24 2016         3      1        1
-  25 2016         3      1        3
-   [ reached 'max' / getOption("max.print") -- omitted 1975 rows ]
+  1  2015         2      3        0
+  2  2015         2      1        3
+  3  2015         2      1        3
+  4  2015         2      1        3
+  5  2015         2      4        0
+  6  2015         2      3        0
+  7  2015         2      1        3
+  8  2015         2      3        0
+  9  2015         2      3        0
+  10 2015         2      1        3
+  11 2015         2      3        0
+  12 2015         2      3        0
+  13 2015         2      3        0
+  14 2015         2      1        3
+  15 2015         2      4        0
+  16 2015         2      1        3
+  17 2015         2      3        0
+  18 2015         2      3        0
+  19 2015         2      3        0
+  20 2015         2      3        0
+  21 2015         2      3        0
+  22 2015         2      1        3
+  23 2015         2      1        3
+  24 2015         2      3        0
+  25 2015         2      1        3
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
 ```
 ]]
 
@@ -379,25 +361,18 @@ count: false
 .column[.content[
 
 ```
-       CODUSU ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15 REGION MAS_500 AGLOMERADO
-       PONDERA CH03 CH04 CH05 CH06 CH07 CH08 CH09 CH10 CH11 CH12 CH13 CH14 CH15
-       CH15_COD CH16 CH16_COD NIVEL_ED ESTADO CAT_OCUP CAT_INAC IMPUTA PP02C1
-       PP02C2 PP02C3 PP02C4 PP02C5 PP02C6 PP02C7 PP02C8 PP02E PP02H PP02I PP03C
-       PP03D PP3E_TOT PP3F_TOT PP03G PP03H PP03I PP03J INTENSI PP04A PP04B_COD
-       PP04B1 PP04B2 PP04B3_MES PP04B3_ANO PP04B3_DIA PP04C PP04C99 PP04D_COD
-       PP04G PP05B2_MES PP05B2_ANO PP05B2_DIA PP05C_1 PP05C_2 PP05C_3 PP05E PP05F
-       PP05H PP06A PP06C PP06D PP06E PP06H PP07A PP07C PP07D PP07E PP07F1 PP07F2
-       PP07F3 PP07F4 PP07F5 PP07G1 PP07G2 PP07G3 PP07G4 PP07G_59 PP07H PP07I
-       PP07J PP07K PP08D1 PP08D4 PP08F1 PP08F2 PP08J1 PP08J2 PP08J3 PP09A
-       PP09A_ESP PP09B PP09C PP09C_ESP PP10A PP10C PP10D PP10E PP11A PP11B_COD
-       PP11B1 PP11B2_MES PP11B2_ANO PP11B2_DIA PP11C PP11C99 PP11D_COD PP11G_ANO
-       PP11G_MES PP11G_DIA PP11L PP11L1 PP11M PP11N PP11O PP11P PP11Q PP11R PP11S
-       PP11T P21 DECOCUR IDECOCUR RDECOCUR GDECOCUR PDECOCUR ADECOCUR PONDIIO
-       TOT_P12 P47T DECINDR IDECINDR RDECINDR GDECINDR PDECINDR ADECINDR PONDII
-       V2_M V3_M V4_M V5_M V8_M V9_M V10_M V11_M V12_M V18_M V19_AM V21_M T_VI
-       ITF DECIFR IDECIFR RDECIFR GDECIFR PDECIFR ADECIFR IPCF DECCFR IDECCFR
-       RDECCFR GDECCFR PDECCFR ADECCFR PONDIH
-   [ reached 'max' / getOption("max.print") -- omitted 2000 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
 ]]
 ---
@@ -413,28 +388,113 @@ base %&gt;%
 .column[.content[
 
 ```
-     ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15
-  1  2016         3         1          4   0
-  2  2016         3         1          2   1
-  3  2016         3         1          3   0
-  4  2016         3         1          2   1
-  5  2016         3         1          3   1
-  6  2016         3         1          6   0
-  7  2016         3         1          1   1
-  8  2016         3         1          5   1
-  9  2016         3         1          2   1
-  10 2016         3         1          1   1
-  11 2016         3         1         12   1
-  12 2016         3         1          3   1
-  13 2016         3         1          2   1
-  14 2016         3         1          2   1
-  15 2016         3         1          3   1
-  16 2016         3         1          2   1
-  17 2016         3         1          1   1
-  18 2016         3         1          1   1
-  19 2016         3         1          3   0
-  20 2016         3         1          4   1
-   [ reached 'max' / getOption("max.print") -- omitted 1980 rows ]
+     TRIMESTRE AGLOMERADO CH04 CH06 ESTADO
+  1          2          2    2   41      3
+  2          2          2    1   46      1
+  3          2          2    2   26      1
+  4          2          2    1   47      1
+  5          2          2    1    1      4
+  6          2          2    2   58      3
+  7          2          2    1   52      1
+  8          2          2    2   16      3
+  9          2          2    1   15      3
+  10         2          2    1   45      1
+  11         2          2    2   39      3
+  12         2          2    1   15      3
+  13         2          2    1   59      3
+  14         2          2    2   38      1
+  15         2          2    1    3      4
+  16         2          2    1   40      1
+  17         2          2    2   36      3
+  18         2          2    1   15      3
+  19         2          2    1   13      3
+  20         2          2    2   11      3
+   [ reached 'max' / getOption("max.print") -- omitted 60008 rows ]
+```
+]]
+
+---
+class: middle, center
+
+### Una más!
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ANO4:AGLOMERADO)
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO
+  1  2015         2          2
+  2  2015         2          2
+  3  2015         2          2
+  4  2015         2          2
+  5  2015         2          2
+  6  2015         2          2
+  7  2015         2          2
+  8  2015         2          2
+  9  2015         2          2
+  10 2015         2          2
+  11 2015         2          2
+  12 2015         2          2
+  13 2015         2          2
+  14 2015         2          2
+  15 2015         2          2
+  16 2015         2          2
+  17 2015         2          2
+  18 2015         2          2
+  19 2015         2          2
+  20 2015         2          2
+  21 2015         2          2
+  22 2015         2          2
+  23 2015         2          2
+  24 2015         2          2
+  25 2015         2          2
+  26 2015         2          2
+  27 2015         2          2
+  28 2015         2          2
+  29 2015         2          2
+  30 2015         2          2
+  31 2015         2          2
+  32 2015         2          2
+  33 2015         2          2
+   [ reached 'max' / getOption("max.print") -- omitted 59995 rows ]
 ```
 ]]
 
@@ -458,25 +518,18 @@ count: false
 .column[.content[
 
 ```
-       CODUSU ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15 REGION MAS_500 AGLOMERADO
-       PONDERA CH03 CH04 CH05 CH06 CH07 CH08 CH09 CH10 CH11 CH12 CH13 CH14 CH15
-       CH15_COD CH16 CH16_COD NIVEL_ED ESTADO CAT_OCUP CAT_INAC IMPUTA PP02C1
-       PP02C2 PP02C3 PP02C4 PP02C5 PP02C6 PP02C7 PP02C8 PP02E PP02H PP02I PP03C
-       PP03D PP3E_TOT PP3F_TOT PP03G PP03H PP03I PP03J INTENSI PP04A PP04B_COD
-       PP04B1 PP04B2 PP04B3_MES PP04B3_ANO PP04B3_DIA PP04C PP04C99 PP04D_COD
-       PP04G PP05B2_MES PP05B2_ANO PP05B2_DIA PP05C_1 PP05C_2 PP05C_3 PP05E PP05F
-       PP05H PP06A PP06C PP06D PP06E PP06H PP07A PP07C PP07D PP07E PP07F1 PP07F2
-       PP07F3 PP07F4 PP07F5 PP07G1 PP07G2 PP07G3 PP07G4 PP07G_59 PP07H PP07I
-       PP07J PP07K PP08D1 PP08D4 PP08F1 PP08F2 PP08J1 PP08J2 PP08J3 PP09A
-       PP09A_ESP PP09B PP09C PP09C_ESP PP10A PP10C PP10D PP10E PP11A PP11B_COD
-       PP11B1 PP11B2_MES PP11B2_ANO PP11B2_DIA PP11C PP11C99 PP11D_COD PP11G_ANO
-       PP11G_MES PP11G_DIA PP11L PP11L1 PP11M PP11N PP11O PP11P PP11Q PP11R PP11S
-       PP11T P21 DECOCUR IDECOCUR RDECOCUR GDECOCUR PDECOCUR ADECOCUR PONDIIO
-       TOT_P12 P47T DECINDR IDECINDR RDECINDR GDECINDR PDECINDR ADECINDR PONDII
-       V2_M V3_M V4_M V5_M V8_M V9_M V10_M V11_M V12_M V18_M V19_AM V21_M T_VI
-       ITF DECIFR IDECIFR RDECIFR GDECIFR PDECIFR ADECIFR IPCF DECCFR IDECCFR
-       RDECCFR GDECCFR PDECCFR ADECCFR PONDIH
-   [ reached 'max' / getOption("max.print") -- omitted 2000 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
 ]]
 ---
@@ -493,121 +546,34 @@ base %&gt;%
 
 ```
      CAT_OCUP ESTADO TRIMESTRE ANO4
-  1         0      4         3 2016
-  2         0      3         3 2016
-  3         0      4         3 2016
-  4         3      2         3 2016
-  5         0      2         3 2016
-  6         0      4         3 2016
-  7         0      3         3 2016
-  8         0      3         3 2016
-  9         0      3         3 2016
-  10        3      1         3 2016
-  11        0      3         3 2016
-  12        0      3         3 2016
-  13        0      3         3 2016
-  14        0      3         3 2016
-  15        0      3         3 2016
-  16        0      3         3 2016
-  17        1      1         3 2016
-  18        3      1         3 2016
-  19        0      4         3 2016
-  20        0      3         3 2016
-  21        0      3         3 2016
-  22        0      3         3 2016
-  23        0      3         3 2016
-  24        1      1         3 2016
-  25        3      1         3 2016
-   [ reached 'max' / getOption("max.print") -- omitted 1975 rows ]
+  1         0      3         2 2015
+  2         3      1         2 2015
+  3         3      1         2 2015
+  4         3      1         2 2015
+  5         0      4         2 2015
+  6         0      3         2 2015
+  7         3      1         2 2015
+  8         0      3         2 2015
+  9         0      3         2 2015
+  10        3      1         2 2015
+  11        0      3         2 2015
+  12        0      3         2 2015
+  13        0      3         2 2015
+  14        3      1         2 2015
+  15        0      4         2 2015
+  16        3      1         2 2015
+  17        0      3         2 2015
+  18        0      3         2 2015
+  19        0      3         2 2015
+  20        0      3         2 2015
+  21        0      3         2 2015
+  22        3      1         2 2015
+  23        3      1         2 2015
+  24        0      3         2 2015
+  25        3      1         2 2015
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
 ```
 ]]
-
----
-#### Función _`select()`_
-
-&lt;br&gt;
-
-- Imprime pero no graba: 
-
-```r
-select(base, 
-       ANO4, TRIMESTRE, AGLOMERADO, ESTADO, CAT_OCUP)
-```
-
-```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2015         2          2      3        0
-  2  2015         2          2      1        3
-  3  2015         2          2      1        3
-  4  2015         2          2      1        3
-  5  2015         2          2      4        0
-  6  2015         2          2      3        0
-  7  2015         2          2      1        3
-  8  2015         2          2      3        0
-  9  2015         2          2      3        0
-  10 2015         2          2      1        3
-  11 2015         2          2      3        0
-  12 2015         2          2      3        0
-  13 2015         2          2      3        0
-  14 2015         2          2      1        3
-  15 2015         2          2      4        0
-  16 2015         2          2      1        3
-  17 2015         2          2      3        0
-  18 2015         2          2      3        0
-  19 2015         2          2      3        0
-  20 2015         2          2      3        0
-   [ reached 'max' / getOption("max.print") -- omitted 60008 rows ]
-```
-
----
-#### Función _`select()`_
-
-&lt;br&gt;
-
-- Graba pero no imprime:
-
-```r
-base_select &lt;- select(base, 
-                      ANO4, TRIMESTRE, AGLOMERADO, ESTADO, CAT_OCUP)
-```
-
----
-#### Función _`select()`_
-
-&lt;br&gt;
-
-- Graba e imprime: 
-
-
-```r
-(base_select &lt;- select(base, 
-                ANO4, TRIMESTRE, AGLOMERADO, ESTADO, CAT_OCUP))
-```
-
-```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2015         2          2      3        0
-  2  2015         2          2      1        3
-  3  2015         2          2      1        3
-  4  2015         2          2      1        3
-  5  2015         2          2      4        0
-  6  2015         2          2      3        0
-  7  2015         2          2      1        3
-  8  2015         2          2      3        0
-  9  2015         2          2      3        0
-  10 2015         2          2      1        3
-  11 2015         2          2      3        0
-  12 2015         2          2      3        0
-  13 2015         2          2      3        0
-  14 2015         2          2      1        3
-  15 2015         2          2      4        0
-  16 2015         2          2      1        3
-  17 2015         2          2      3        0
-  18 2015         2          2      3        0
-  19 2015         2          2      3        0
-  20 2015         2          2      3        0
-   [ reached 'max' / getOption("max.print") -- omitted 60008 rows ]
-```
 
 ---
 class: middle, center
@@ -619,8 +585,8 @@ class: middle, center
 #### _Filtra casos (filas) de una base de datos en función de una o más variables_
 
 ---
-### Función `filter()`
-&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
 
 - En R base: 
 ```r
@@ -630,24 +596,19 @@ base_de_dato$variable[base_de_datos$variable == categoria]
 --
 &lt;br&gt;
 
-```r
-filter(base_de_datos, 
-       variable == categoria)
-```
-o
-
+- En `tidyverse`:
 ```r
 base_de_datos %&gt;% 
   filter(variable == categoria)
 ```
 
 ---
-### Función `filter()`
-&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
 
-Supongamos que queremos quedarnos con la __población ocupada__ de la base de datos. 
+Supongamos que queremos quedarnos con la población que reside en `Bahía Blanca`:
  
-Según el diseño de registro de la EPH, la variable se llama `ESTADO` y el valor que corresponde a las y los ocupados es el `1`. 
+Según el diseño de registro de la EPH, la variable se llama `AGLOMERADO` y el valor que corresponde a Bahía Blanca es el `3`. 
 
 La sentencia quedaría de la siguiente manera:
 
@@ -659,34 +620,24 @@ count: false
 .column[.content[
 
 ```r
-*base_select
+*base
 ```
 ]]
 .column[.content[
 
 ```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2016         3         33      4        0
-  2  2016         3         32      3        0
-  3  2016         3         93      4        0
-  4  2016         3         33      2        3
-  5  2016         3          2      2        0
-  6  2016         3         18      4        0
-  7  2016         3         14      3        0
-  8  2016         3         33      3        0
-  9  2016         3          4      3        0
-  10 2016         3          5      1        3
-  11 2016         3         15      3        0
-  12 2016         3         18      3        0
-  13 2016         3         15      3        0
-  14 2016         3         33      3        0
-  15 2016         3         12      3        0
-  16 2016         3          2      3        0
-  17 2016         3         91      1        1
-  18 2016         3          8      1        3
-  19 2016         3         33      4        0
-  20 2016         3         15      3        0
-   [ reached 'max' / getOption("max.print") -- omitted 1980 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
 ]]
 ---
@@ -695,40 +646,106 @@ count: false
 .column[.content[
 
 ```r
-base_select %&gt;%  
-* filter(ESTADO == 1)
+base %&gt;%  
+* select(TRIMESTRE, ANO4, AGLOMERADO)
 ```
 ]]
 .column[.content[
 
 ```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2016         3          5      1        3
-  2  2016         3         91      1        1
-  3  2016         3          8      1        3
-  4  2016         3          8      1        1
-  5  2016         3         19      1        3
-  6  2016         3         34      1        2
-  7  2016         3         29      1        1
-  8  2016         3         33      1        3
-  9  2016         3         18      1        3
-  10 2016         3         32      1        3
-  11 2016         3         18      1        3
-  12 2016         3         33      1        3
-  13 2016         3         19      1        2
-  14 2016         3         33      1        3
-  15 2016         3         33      1        3
-  16 2016         3         93      1        3
-  17 2016         3         12      1        1
-  18 2016         3         25      1        3
-  19 2016         3         36      1        3
-  20 2016         3         27      1        1
-   [ reached 'max' / getOption("max.print") -- omitted 805 rows ]
+     TRIMESTRE ANO4 AGLOMERADO
+  1          2 2015          2
+  2          2 2015          2
+  3          2 2015          2
+  4          2 2015          2
+  5          2 2015          2
+  6          2 2015          2
+  7          2 2015          2
+  8          2 2015          2
+  9          2 2015          2
+  10         2 2015          2
+  11         2 2015          2
+  12         2 2015          2
+  13         2 2015          2
+  14         2 2015          2
+  15         2 2015          2
+  16         2 2015          2
+  17         2 2015          2
+  18         2 2015          2
+  19         2 2015          2
+  20         2 2015          2
+  21         2 2015          2
+  22         2 2015          2
+  23         2 2015          2
+  24         2 2015          2
+  25         2 2015          2
+  26         2 2015          2
+  27         2 2015          2
+  28         2 2015          2
+  29         2 2015          2
+  30         2 2015          2
+  31         2 2015          2
+  32         2 2015          2
+  33         2 2015          2
+   [ reached 'max' / getOption("max.print") -- omitted 59995 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(TRIMESTRE, ANO4, AGLOMERADO) %&gt;%  
+* filter(AGLOMERADO == 3)
+```
+]]
+.column[.content[
+
+```
+     TRIMESTRE ANO4 AGLOMERADO
+  1          2 2015          3
+  2          2 2015          3
+  3          2 2015          3
+  4          2 2015          3
+  5          2 2015          3
+  6          2 2015          3
+  7          2 2015          3
+  8          2 2015          3
+  9          2 2015          3
+  10         2 2015          3
+  11         2 2015          3
+  12         2 2015          3
+  13         2 2015          3
+  14         2 2015          3
+  15         2 2015          3
+  16         2 2015          3
+  17         2 2015          3
+  18         2 2015          3
+  19         2 2015          3
+  20         2 2015          3
+  21         2 2015          3
+  22         2 2015          3
+  23         2 2015          3
+  24         2 2015          3
+  25         2 2015          3
+  26         2 2015          3
+  27         2 2015          3
+  28         2 2015          3
+  29         2 2015          3
+  30         2 2015          3
+  31         2 2015          3
+  32         2 2015          3
+  33         2 2015          3
+   [ reached 'max' / getOption("max.print") -- omitted 1376 rows ]
 ```
 ]]
 
 ---
-### Función _`filter()`_
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
 
 #### Condiciones por las cuales filtrar:
 
@@ -748,122 +765,25 @@ base_select %&gt;%
 
 .pull-right[
 
-| Combinador |Acción |
-| :---       | ---:  |
-|            |       |
-| ` &amp; `      | *y*   |
-| ` , `      | *y*   |
-| ` | `      | *o*   |
+| Operador | Descripción |
+| :---     | ---:               |
+|          |                    |
+| `&amp;`      | *y* - Cuando se cumplen ambas condiciones   |
+| &amp;#124;   | *o* - Cuando se cumple una u otra condición   |
 
----
 
 ]
 
-
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-*base_select
-```
-]]
-.column[.content[
-
-```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2015         2          2      3        0
-  2  2015         2          2      1        3
-  3  2015         2          2      1        3
-  4  2015         2          2      1        3
-  5  2015         2          2      4        0
-  6  2015         2          2      3        0
-  7  2015         2          2      1        3
-  8  2015         2          2      3        0
-  9  2015         2          2      3        0
-  10 2015         2          2      1        3
-  11 2015         2          2      3        0
-  12 2015         2          2      3        0
-  13 2015         2          2      3        0
-  14 2015         2          2      1        3
-  15 2015         2          2      4        0
-  16 2015         2          2      1        3
-  17 2015         2          2      3        0
-  18 2015         2          2      3        0
-  19 2015         2          2      3        0
-  20 2015         2          2      3        0
-   [ reached 'max' / getOption("max.print") -- omitted 60008 rows ]
-```
-]]
 ---
-class: split-40
-count: false
-.column[.content[
+class: middle, 
 
-```r
-base_select %&gt;%  
-* filter(ESTADO == 1 &amp; (AGLOMERADO == 2 | AGLOMERADO == 5) &amp; CAT_OCUP != 3)
-```
-]]
-.column[.content[
+Supongamos que queremos quedarons sólo con aquella población que cumpla las siguientes condiciones:
 
-```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP
-  1  2015         2          2      1        1
-  2  2015         2          2      1        2
-  3  2015         2          2      1        2
-  4  2015         2          2      1        2
-  5  2015         2          2      1        2
-  6  2015         2          2      1        2
-  7  2015         2          2      1        2
-  8  2015         2          2      1        2
-  9  2015         2          2      1        2
-  10 2015         2          2      1        2
-  11 2015         2          2      1        2
-  12 2015         2          2      1        2
-  13 2015         2          2      1        2
-  14 2015         2          2      1        2
-  15 2015         2          2      1        2
-  16 2015         2          2      1        1
-  17 2015         2          2      1        2
-  18 2015         2          2      1        1
-  19 2015         2          2      1        2
-  20 2015         2          2      1        2
-   [ reached 'max' / getOption("max.print") -- omitted 266 rows ]
-```
-]]
+- Se encuentre ocupada (`ESTADO == 1`);
 
----
-class: middle, center
+- Viva en _La Plata_ (`AGLOMERADO == 2`) o en Santa Fé (`AGLOMERADO == 5`);
 
-# __mutate()__
-
-***
-
-#### _Crea variables nuevas o reemplaza existentes_
-
----
-### Función `mutate()`
-
-&lt;br&gt;
-
-- En R base: 
-```r
-base_de_dato$var_nueva &lt;- base_de_datos$var_1 + base_de_datos$var_2
-```
---
-
-- En `tidyverse`:
-```r
-mutate(base_de_datos,
-       var_nueva = var_1 + var_2)
-```
-
----
-class: center, middle
-
-Supongamos que queremos crear una nueva variable que sume los montos de los ingresos que perciben las personas tanto por su ocupación principal (`P21`) como por otras ocupaciones (`TOT_P12`).
+- Sea asalariada (`CAT_OCUP == 3`):
 
 ---
 
@@ -879,25 +799,193 @@ count: false
 .column[.content[
 
 ```
-       CODUSU ANO4 TRIMESTRE NRO_HOGAR COMPONENTE H15 REGION MAS_500 AGLOMERADO
-       PONDERA CH03 CH04 CH05 CH06 CH07 CH08 CH09 CH10 CH11 CH12 CH13 CH14 CH15
-       CH15_COD CH16 CH16_COD NIVEL_ED ESTADO CAT_OCUP CAT_INAC IMPUTA PP02C1
-       PP02C2 PP02C3 PP02C4 PP02C5 PP02C6 PP02C7 PP02C8 PP02E PP02H PP02I PP03C
-       PP03D PP3E_TOT PP3F_TOT PP03G PP03H PP03I PP03J INTENSI PP04A PP04B_COD
-       PP04B1 PP04B2 PP04B3_MES PP04B3_ANO PP04B3_DIA PP04C PP04C99 PP04D_COD
-       PP04G PP05B2_MES PP05B2_ANO PP05B2_DIA PP05C_1 PP05C_2 PP05C_3 PP05E PP05F
-       PP05H PP06A PP06C PP06D PP06E PP06H PP07A PP07C PP07D PP07E PP07F1 PP07F2
-       PP07F3 PP07F4 PP07F5 PP07G1 PP07G2 PP07G3 PP07G4 PP07G_59 PP07H PP07I
-       PP07J PP07K PP08D1 PP08D4 PP08F1 PP08F2 PP08J1 PP08J2 PP08J3 PP09A
-       PP09A_ESP PP09B PP09C PP09C_ESP PP10A PP10C PP10D PP10E PP11A PP11B_COD
-       PP11B1 PP11B2_MES PP11B2_ANO PP11B2_DIA PP11C PP11C99 PP11D_COD PP11G_ANO
-       PP11G_MES PP11G_DIA PP11L PP11L1 PP11M PP11N PP11O PP11P PP11Q PP11R PP11S
-       PP11T P21 DECOCUR IDECOCUR RDECOCUR GDECOCUR PDECOCUR ADECOCUR PONDIIO
-       TOT_P12 P47T DECINDR IDECINDR RDECINDR GDECINDR PDECINDR ADECINDR PONDII
-       V2_M V3_M V4_M V5_M V8_M V9_M V10_M V11_M V12_M V18_M V19_AM V21_M T_VI
-       ITF DECIFR IDECIFR RDECIFR GDECIFR PDECIFR ADECIFR IPCF DECCFR IDECCFR
-       RDECCFR GDECCFR PDECCFR ADECCFR PONDIH
-   [ reached 'max' / getOption("max.print") -- omitted 2000 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(TRIMESTRE, ANO4, AGLOMERADO, ESTADO, CAT_OCUP)
+```
+]]
+.column[.content[
+
+```
+     TRIMESTRE ANO4 AGLOMERADO ESTADO CAT_OCUP
+  1          2 2015          2      3        0
+  2          2 2015          2      1        3
+  3          2 2015          2      1        3
+  4          2 2015          2      1        3
+  5          2 2015          2      4        0
+  6          2 2015          2      3        0
+  7          2 2015          2      1        3
+  8          2 2015          2      3        0
+  9          2 2015          2      3        0
+  10         2 2015          2      1        3
+  11         2 2015          2      3        0
+  12         2 2015          2      3        0
+  13         2 2015          2      3        0
+  14         2 2015          2      1        3
+  15         2 2015          2      4        0
+  16         2 2015          2      1        3
+  17         2 2015          2      3        0
+  18         2 2015          2      3        0
+  19         2 2015          2      3        0
+  20         2 2015          2      3        0
+   [ reached 'max' / getOption("max.print") -- omitted 60008 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(TRIMESTRE, ANO4, AGLOMERADO, ESTADO, CAT_OCUP) %&gt;%  
+* filter(ESTADO == 1 &amp; CAT_OCUP != 3)
+```
+]]
+.column[.content[
+
+```
+     TRIMESTRE ANO4 AGLOMERADO ESTADO CAT_OCUP
+  1          2 2015          2      1        1
+  2          2 2015          2      1        2
+  3          2 2015          2      1        2
+  4          2 2015          2      1        2
+  5          2 2015          2      1        2
+  6          2 2015          2      1        2
+  7          2 2015          2      1        2
+  8          2 2015          2      1        2
+  9          2 2015          2      1        2
+  10         2 2015          2      1        2
+  11         2 2015          2      1        2
+  12         2 2015          2      1        2
+  13         2 2015          2      1        2
+  14         2 2015          2      1        2
+  15         2 2015          2      1        2
+  16         2 2015          2      1        1
+  17         2 2015          2      1        2
+  18         2 2015          2      1        1
+  19         2 2015          2      1        2
+  20         2 2015          2      1        2
+   [ reached 'max' / getOption("max.print") -- omitted 5643 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(TRIMESTRE, ANO4, AGLOMERADO, ESTADO, CAT_OCUP) %&gt;%  
+  filter(ESTADO == 1 &amp; CAT_OCUP != 3) %&gt;%  
+* filter(AGLOMERADO == 2 | AGLOMERADO == 5)
+```
+]]
+.column[.content[
+
+```
+     TRIMESTRE ANO4 AGLOMERADO ESTADO CAT_OCUP
+  1          2 2015          2      1        1
+  2          2 2015          2      1        2
+  3          2 2015          2      1        2
+  4          2 2015          2      1        2
+  5          2 2015          2      1        2
+  6          2 2015          2      1        2
+  7          2 2015          2      1        2
+  8          2 2015          2      1        2
+  9          2 2015          2      1        2
+  10         2 2015          2      1        2
+  11         2 2015          2      1        2
+  12         2 2015          2      1        2
+  13         2 2015          2      1        2
+  14         2 2015          2      1        2
+  15         2 2015          2      1        2
+  16         2 2015          2      1        1
+  17         2 2015          2      1        2
+  18         2 2015          2      1        1
+  19         2 2015          2      1        2
+  20         2 2015          2      1        2
+   [ reached 'max' / getOption("max.print") -- omitted 266 rows ]
+```
+]]
+
+---
+class: middle, center
+
+# __mutate()__
+
+***
+
+#### _Crea variables nuevas o reemplaza existentes_
+
+---
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+
+- En R base: 
+```r
+base_de_dato$var_nueva &lt;- base_de_datos$var_1 + base_de_datos$var_2
+```
+--
+&lt;br&gt;
+
+- En `tidyverse`:
+```r
+base_de_datos %&gt;% 
+   mutate(var_nueva = var_1 + var_2)
+```
+
+---
+class: center, middle
+
+Supongamos que queremos observar cuánto ganas las personas que tienen dos o más empleos. Para ello, vamos a crear una nueva variable que sume los montos de los ingresos que perciben las personas tanto por su ocupación principal (`P21`) como por otras ocupaciones (`TOT_P12`).
+
+---
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
 ]]
 ---
@@ -914,32 +1002,32 @@ base %&gt;%
 
 ```
      ESTADO CAT_OCUP   P21 TOT_P12
-  1       4        0     0       0
-  2       3        0     0       0
-  3       4        0     0       0
-  4       2        3     0       0
-  5       2        0     0       0
-  6       4        0     0       0
-  7       3        0     0       0
+  1       3        0     0       0
+  2       1        3  6000       0
+  3       1        3  5000       0
+  4       1        3  5000       0
+  5       4        0     0       0
+  6       3        0     0       0
+  7       1        3  6500    4500
   8       3        0     0       0
   9       3        0     0       0
-  10      1        3 30000    1000
+  10      1        3  9500       0
   11      3        0     0       0
   12      3        0     0       0
   13      3        0     0       0
-  14      3        0     0       0
-  15      3        0     0       0
-  16      3        0     0       0
-  17      1        1 15000   12000
-  18      1        3 16000       0
-  19      4        0     0       0
+  14      1        3  6000       0
+  15      4        0     0       0
+  16      1        3  8000    1000
+  17      3        0     0       0
+  18      3        0     0       0
+  19      3        0     0       0
   20      3        0     0       0
   21      3        0     0       0
-  22      3        0     0       0
-  23      3        0     0       0
-  24      1        1  2700       0
+  22      1        3  3800       0
+  23      1        3  1000    2800
+  24      3        0     0       0
   25      1        3 10000       0
-   [ reached 'max' / getOption("max.print") -- omitted 1975 rows ]
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
 ```
 ]]
 ---
@@ -1076,71 +1164,1884 @@ class: center, middle
 Con `mutate()` también se puede editar una variable ya existente en la base de datos
 
 ---
-### Función `mutate()`
-&lt;br&gt;
 
+
+class: split-40
+count: false
+.column[.content[
 
 ```r
-base_select %&gt;% 
-  mutate(ESTADO_recod = case_when(ESTADO == 1 ~ "Ocupado/a",
-                                  ESTADO == 2 ~ "Desocupado/a",
-                                  ESTADO == 3 ~ "Inactivo/a",
-                                  ESTADO == 4 ~ "Menor de 10 años"))
+*base
 ```
+]]
+.column[.content[
 
 ```
-     ANO4 TRIMESTRE AGLOMERADO ESTADO CAT_OCUP     ESTADO_recod
-  1  2015         2          2      3        0       Inactivo/a
-  2  2015         2          2      1        3        Ocupado/a
-  3  2015         2          2      1        3        Ocupado/a
-  4  2015         2          2      1        3        Ocupado/a
-  5  2015         2          2      4        0 Menor de 10 años
-  6  2015         2          2      3        0       Inactivo/a
-  7  2015         2          2      1        3        Ocupado/a
-  8  2015         2          2      3        0       Inactivo/a
-  9  2015         2          2      3        0       Inactivo/a
-  10 2015         2          2      1        3        Ocupado/a
-  11 2015         2          2      3        0       Inactivo/a
-  12 2015         2          2      3        0       Inactivo/a
-  13 2015         2          2      3        0       Inactivo/a
-  14 2015         2          2      1        3        Ocupado/a
-  15 2015         2          2      4        0 Menor de 10 años
-  16 2015         2          2      1        3        Ocupado/a
-   [ reached 'max' / getOption("max.print") -- omitted 60012 rows ]
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
 ```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, P21, TOT_P12)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP   P21 TOT_P12
+  1       3        0     0       0
+  2       1        3  6000       0
+  3       1        3  5000       0
+  4       1        3  5000       0
+  5       4        0     0       0
+  6       3        0     0       0
+  7       1        3  6500    4500
+  8       3        0     0       0
+  9       3        0     0       0
+  10      1        3  9500       0
+  11      3        0     0       0
+  12      3        0     0       0
+  13      3        0     0       0
+  14      1        3  6000       0
+  15      4        0     0       0
+  16      1        3  8000    1000
+  17      3        0     0       0
+  18      3        0     0       0
+  19      3        0     0       0
+  20      3        0     0       0
+  21      3        0     0       0
+  22      1        3  3800       0
+  23      1        3  1000    2800
+  24      3        0     0       0
+  25      1        3 10000       0
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+* filter(ESTADO == 1)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP   P21 TOT_P12
+  1       1        3  6000       0
+  2       1        3  5000       0
+  3       1        3  5000       0
+  4       1        3  6500    4500
+  5       1        3  9500       0
+  6       1        3  6000       0
+  7       1        3  8000    1000
+  8       1        3  3800       0
+  9       1        3  1000    2800
+  10      1        3 10000       0
+  11      1        1  4500       0
+  12      1        3  4900       0
+  13      1        2 11000       0
+  14      1        3  9000       0
+  15      1        3  1500    2000
+  16      1        3  8000       0
+  17      1        2  2500       0
+  18      1        3  7500       0
+  19      1        2  5000       0
+  20      1        2  5000       0
+  21      1        3  7000       0
+  22      1        3  6500       0
+  23      1        3  3000       0
+  24      1        3  2000       0
+  25      1        3  8500       0
+   [ reached 'max' / getOption("max.print") -- omitted 24373 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+  filter(ESTADO == 1) %&gt;%  
+* mutate(ESTADO = case_when(ESTADO == 1 ~ "Ocupado/a",
+*                           ESTADO == 2 ~ "Desocupado/a",
+*                           ESTADO == 3 ~ "Inactivo/a",
+*                           ESTADO == 4 ~ "Menor de 10 años"))
+```
+]]
+.column[.content[
+
+```
+        ESTADO CAT_OCUP   P21 TOT_P12
+  1  Ocupado/a        3  6000       0
+  2  Ocupado/a        3  5000       0
+  3  Ocupado/a        3  5000       0
+  4  Ocupado/a        3  6500    4500
+  5  Ocupado/a        3  9500       0
+  6  Ocupado/a        3  6000       0
+  7  Ocupado/a        3  8000    1000
+  8  Ocupado/a        3  3800       0
+  9  Ocupado/a        3  1000    2800
+  10 Ocupado/a        3 10000       0
+  11 Ocupado/a        1  4500       0
+  12 Ocupado/a        3  4900       0
+  13 Ocupado/a        2 11000       0
+  14 Ocupado/a        3  9000       0
+  15 Ocupado/a        3  1500    2000
+  16 Ocupado/a        3  8000       0
+  17 Ocupado/a        2  2500       0
+  18 Ocupado/a        3  7500       0
+  19 Ocupado/a        2  5000       0
+  20 Ocupado/a        2  5000       0
+  21 Ocupado/a        3  7000       0
+  22 Ocupado/a        3  6500       0
+  23 Ocupado/a        3  3000       0
+  24 Ocupado/a        3  2000       0
+  25 Ocupado/a        3  8500       0
+   [ reached 'max' / getOption("max.print") -- omitted 24373 rows ]
+```
+]]
 
 ---
 class: middle, center
 
-# __rename__
+# __rename()__
 
 ***
 
-#### _Crea variables nuevas o reemplaza existentes_
+#### _Asigna un nuevo nombre a variables existentes_
 
 ---
-### Función `mutate()`
 
-&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
 
 - En R base: 
 ```r
 colnames(base_de_datos)[1] &lt;- "nombre_nuevo"
 
+
 colnames(base_de_datos)[colnames(base_de_datos) == 'nombre_viejo'] &lt;- 'nombre_nuevo'
 ```
+
 --
+&lt;br&gt; 
 
 - En `tidyverse`:
 ```r
-rename(base_de_datos,
-       var_nueva = var_vieja)
+base_de_datos %&gt;% 
+   rename(var_nueva = var_vieja)
 ```
+
+---
+class: center, middle
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, P21, TOT_P12)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP   P21 TOT_P12
+  1       3        0     0       0
+  2       1        3  6000       0
+  3       1        3  5000       0
+  4       1        3  5000       0
+  5       4        0     0       0
+  6       3        0     0       0
+  7       1        3  6500    4500
+  8       3        0     0       0
+  9       3        0     0       0
+  10      1        3  9500       0
+  11      3        0     0       0
+  12      3        0     0       0
+  13      3        0     0       0
+  14      1        3  6000       0
+  15      4        0     0       0
+  16      1        3  8000    1000
+  17      3        0     0       0
+  18      3        0     0       0
+  19      3        0     0       0
+  20      3        0     0       0
+  21      3        0     0       0
+  22      1        3  3800       0
+  23      1        3  1000    2800
+  24      3        0     0       0
+  25      1        3 10000       0
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+* rename(cond_act = ESTADO)
+```
+]]
+.column[.content[
+
+```
+     cond_act CAT_OCUP   P21 TOT_P12
+  1         3        0     0       0
+  2         1        3  6000       0
+  3         1        3  5000       0
+  4         1        3  5000       0
+  5         4        0     0       0
+  6         3        0     0       0
+  7         1        3  6500    4500
+  8         3        0     0       0
+  9         3        0     0       0
+  10        1        3  9500       0
+  11        3        0     0       0
+  12        3        0     0       0
+  13        3        0     0       0
+  14        1        3  6000       0
+  15        4        0     0       0
+  16        1        3  8000    1000
+  17        3        0     0       0
+  18        3        0     0       0
+  19        3        0     0       0
+  20        3        0     0       0
+  21        3        0     0       0
+  22        1        3  3800       0
+  23        1        3  1000    2800
+  24        3        0     0       0
+  25        1        3 10000       0
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+  rename(cond_act = ESTADO) %&gt;%  
+* rename(categoria_ocupacional = CAT_OCUP,
+*        ingreso_oc_pr = P21,
+*        ingreso_otras_oc = TOT_P12)
+```
+]]
+.column[.content[
+
+```
+     cond_act categoria_ocupacional ingreso_oc_pr ingreso_otras_oc
+  1         3                     0             0                0
+  2         1                     3          6000                0
+  3         1                     3          5000                0
+  4         1                     3          5000                0
+  5         4                     0             0                0
+  6         3                     0             0                0
+  7         1                     3          6500             4500
+  8         3                     0             0                0
+  9         3                     0             0                0
+  10        1                     3          9500                0
+  11        3                     0             0                0
+  12        3                     0             0                0
+  13        3                     0             0                0
+  14        1                     3          6000                0
+  15        4                     0             0                0
+  16        1                     3          8000             1000
+  17        3                     0             0                0
+  18        3                     0             0                0
+  19        3                     0             0                0
+  20        3                     0             0                0
+  21        3                     0             0                0
+  22        1                     3          3800                0
+  23        1                     3          1000             2800
+  24        3                     0             0                0
+  25        1                     3         10000                0
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+
+---
+class: middle, center
+
+# __arrange()__
+
+***
+
+#### _Ordena los valores de una variable en base a un criterio_
+
+---
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+
+Orden ascendente (por default)
+
+```r
+base_de_datos %&gt;% 
+   arrange(var1)
+```
+&lt;br&gt;
+
+Orden descentende
+```r
+base_de_datos %&gt;% 
+   arrange(desc(var1))
+```
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, P21, TOT_P12)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP   P21 TOT_P12
+  1       3        0     0       0
+  2       1        3  6000       0
+  3       1        3  5000       0
+  4       1        3  5000       0
+  5       4        0     0       0
+  6       3        0     0       0
+  7       1        3  6500    4500
+  8       3        0     0       0
+  9       3        0     0       0
+  10      1        3  9500       0
+  11      3        0     0       0
+  12      3        0     0       0
+  13      3        0     0       0
+  14      1        3  6000       0
+  15      4        0     0       0
+  16      1        3  8000    1000
+  17      3        0     0       0
+  18      3        0     0       0
+  19      3        0     0       0
+  20      3        0     0       0
+  21      3        0     0       0
+  22      1        3  3800       0
+  23      1        3  1000    2800
+  24      3        0     0       0
+  25      1        3 10000       0
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+* filter(P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP   P21 TOT_P12
+  1       1        3  6000       0
+  2       1        3  5000       0
+  3       1        3  5000       0
+  4       1        3  6500    4500
+  5       1        3  9500       0
+  6       1        3  6000       0
+  7       1        3  8000    1000
+  8       1        3  3800       0
+  9       1        3  1000    2800
+  10      1        3 10000       0
+  11      1        1  4500       0
+  12      1        3  4900       0
+  13      1        2 11000       0
+  14      1        3  9000       0
+  15      1        3  1500    2000
+  16      1        3  8000       0
+  17      1        2  2500       0
+  18      1        3  7500       0
+  19      1        2  5000       0
+  20      1        2  5000       0
+  21      1        3  7000       0
+  22      1        3  6500       0
+  23      1        3  3000       0
+  24      1        3  2000       0
+  25      1        3  8500       0
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+  filter(P21 &gt; 0) %&gt;%  
+* arrange(P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP P21 TOT_P12
+  1       1        3 100       0
+  2       1        2 100       0
+  3       1        2 100       0
+  4       1        2 100       0
+  5       1        2 100       0
+  6       1        2 100       0
+  7       1        2 100       0
+  8       1        3 100       0
+  9       1        3 100       0
+  10      1        2 110       0
+  11      1        3 150       0
+  12      1        3 150       0
+  13      1        2 150       0
+  14      1        2 150       0
+  15      1        3 150       0
+  16      1        2 150       0
+  17      1        3 150       0
+  18      1        3 150       0
+  19      1        3 150       0
+  20      1        3 200       0
+  21      1        3 200       0
+  22      1        2 200       0
+  23      1        2 200       0
+  24      1        3 200       0
+  25      1        2 200       0
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, P21, TOT_P12) %&gt;%  
+  filter(P21 &gt; 0) %&gt;%  
+  arrange(P21) %&gt;%  
+* arrange(desc(P21))
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP    P21 TOT_P12
+  1       1        3 105000       0
+  2       1        1 100000       0
+  3       1        2 100000       0
+  4       1        1 100000       0
+  5       1        1  85000       0
+  6       1        3  80000       0
+  7       1        2  70000       0
+  8       1        2  68000       0
+  9       1        3  60000       0
+  10      1        3  60000       0
+  11      1        3  55000       0
+  12      1        3  51000       0
+  13      1        1  50000       0
+  14      1        3  50000       0
+  15      1        3  50000       0
+  16      1        3  50000       0
+  17      1        3  50000       0
+  18      1        3  50000       0
+  19      1        2  50000       0
+  20      1        1  50000       0
+  21      1        3  50000       0
+  22      1        1  50000       0
+  23      1        3  50000       0
+  24      1        1  50000       0
+  25      1        1  50000       0
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+
+---
+class: middle, center
+
+# __summarise()__
+
+***
+
+#### _Resume la información en una nueva tabla_
+
+---
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+
+```r
+base_de_datos %&gt;% 
+        summarise(var1_resumen = sum(var1),
+                  var2_media   = mean(var2),
+                  var2_desvio  = sd(var2),
+                  var2_cv      = var2_desvio / var2_media * 100)
+```
+
+---
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, CH04, P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       3        0    2     0
+  2       1        3    1  6000
+  3       1        3    2  5000
+  4       1        3    1  5000
+  5       4        0    1     0
+  6       3        0    2     0
+  7       1        3    1  6500
+  8       3        0    2     0
+  9       3        0    1     0
+  10      1        3    1  9500
+  11      3        0    2     0
+  12      3        0    1     0
+  13      3        0    1     0
+  14      1        3    2  6000
+  15      4        0    1     0
+  16      1        3    1  8000
+  17      3        0    2     0
+  18      3        0    1     0
+  19      3        0    1     0
+  20      3        0    2     0
+  21      3        0    2     0
+  22      1        3    2  3800
+  23      1        3    1  1000
+  24      3        0    1     0
+  25      1        3    2 10000
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+* filter(P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       1        3    1  6000
+  2       1        3    2  5000
+  3       1        3    1  5000
+  4       1        3    1  6500
+  5       1        3    1  9500
+  6       1        3    2  6000
+  7       1        3    1  8000
+  8       1        3    2  3800
+  9       1        3    1  1000
+  10      1        3    2 10000
+  11      1        1    2  4500
+  12      1        3    1  4900
+  13      1        2    2 11000
+  14      1        3    1  9000
+  15      1        3    2  1500
+  16      1        3    1  8000
+  17      1        2    1  2500
+  18      1        3    1  7500
+  19      1        2    1  5000
+  20      1        2    2  5000
+  21      1        3    2  7000
+  22      1        3    1  6500
+  23      1        3    1  3000
+  24      1        3    1  2000
+  25      1        3    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(P21 &gt; 0) %&gt;%  
+* summarise(ingreso_medio  = mean(P21),
+*           ingreso_desvio = sd(P21),
+*           ingreso_cv     = ingreso_desvio / ingreso_medio * 100)
+```
+]]
+.column[.content[
+
+```
+    ingreso_medio ingreso_desvio ingreso_cv
+  1       7340.77       5595.099   76.21951
+```
+]]
+
+
+---
+class: middle, center
+
+# __group_by()__
+
+***
+
+#### _Aplica una operación sobre la población de forma segmentada por alguna variable_
+
+---
+
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+
+```r
+base_de_datos %&gt;% 
+        group_by(var1)
+```
+
+---
+class: center, middle
+
+Queremos conocer el ingreso promedio de la población ocupada según su categoría ocupacional (si son asalariados, patrones o cuentapropistas)
+
+---
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, CH04, P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       3        0    2     0
+  2       1        3    1  6000
+  3       1        3    2  5000
+  4       1        3    1  5000
+  5       4        0    1     0
+  6       3        0    2     0
+  7       1        3    1  6500
+  8       3        0    2     0
+  9       3        0    1     0
+  10      1        3    1  9500
+  11      3        0    2     0
+  12      3        0    1     0
+  13      3        0    1     0
+  14      1        3    2  6000
+  15      4        0    1     0
+  16      1        3    1  8000
+  17      3        0    2     0
+  18      3        0    1     0
+  19      3        0    1     0
+  20      3        0    2     0
+  21      3        0    2     0
+  22      1        3    2  3800
+  23      1        3    1  1000
+  24      3        0    1     0
+  25      1        3    2 10000
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+* filter(ESTADO == 1 &amp; P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       1        3    1  6000
+  2       1        3    2  5000
+  3       1        3    1  5000
+  4       1        3    1  6500
+  5       1        3    1  9500
+  6       1        3    2  6000
+  7       1        3    1  8000
+  8       1        3    2  3800
+  9       1        3    1  1000
+  10      1        3    2 10000
+  11      1        1    2  4500
+  12      1        3    1  4900
+  13      1        2    2 11000
+  14      1        3    1  9000
+  15      1        3    2  1500
+  16      1        3    1  8000
+  17      1        2    1  2500
+  18      1        3    1  7500
+  19      1        2    1  5000
+  20      1        2    2  5000
+  21      1        3    2  7000
+  22      1        3    1  6500
+  23      1        3    1  3000
+  24      1        3    1  2000
+  25      1        3    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+* mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",
+*                             CAT_OCUP == 2 ~ "Cuenta propia",
+*                             CAT_OCUP == 3 ~ "Asalariado"))
+```
+]]
+.column[.content[
+
+```
+     ESTADO      CAT_OCUP CH04   P21
+  1       1    Asalariado    1  6000
+  2       1    Asalariado    2  5000
+  3       1    Asalariado    1  5000
+  4       1    Asalariado    1  6500
+  5       1    Asalariado    1  9500
+  6       1    Asalariado    2  6000
+  7       1    Asalariado    1  8000
+  8       1    Asalariado    2  3800
+  9       1    Asalariado    1  1000
+  10      1    Asalariado    2 10000
+  11      1        Patrón    2  4500
+  12      1    Asalariado    1  4900
+  13      1 Cuenta propia    2 11000
+  14      1    Asalariado    1  9000
+  15      1    Asalariado    2  1500
+  16      1    Asalariado    1  8000
+  17      1 Cuenta propia    1  2500
+  18      1    Asalariado    1  7500
+  19      1 Cuenta propia    1  5000
+  20      1 Cuenta propia    2  5000
+  21      1    Asalariado    2  7000
+  22      1    Asalariado    1  6500
+  23      1    Asalariado    1  3000
+  24      1    Asalariado    1  2000
+  25      1    Asalariado    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado")) %&gt;%  
+* group_by(CAT_OCUP)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 23,725 x 4
+  # Groups:   CAT_OCUP [3]
+     ESTADO CAT_OCUP    CH04   P21
+      &lt;int&gt; &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt;
+   1      1 Asalariado     1  6000
+   2      1 Asalariado     2  5000
+   3      1 Asalariado     1  5000
+   4      1 Asalariado     1  6500
+   5      1 Asalariado     1  9500
+   6      1 Asalariado     2  6000
+   7      1 Asalariado     1  8000
+   8      1 Asalariado     2  3800
+   9      1 Asalariado     1  1000
+  10      1 Asalariado     2 10000
+  # ... with 23,715 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado")) %&gt;%  
+  group_by(CAT_OCUP) %&gt;%  
+* summarise(ingreso_medio  = mean(P21),
+*           ingreso_desvio = sd(P21),
+*           ingreso_cv     = ingreso_desvio / ingreso_medio * 100)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 3 x 4
+    CAT_OCUP      ingreso_medio ingreso_desvio ingreso_cv
+    &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+  1 Asalariado            7667.          5375.       70.1
+  2 Cuenta propia         5413.          5057.       93.4
+  3 Patrón               10096.          8852.       87.7
+```
+]]
+
+---
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, CH04, P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       3        0    2     0
+  2       1        3    1  6000
+  3       1        3    2  5000
+  4       1        3    1  5000
+  5       4        0    1     0
+  6       3        0    2     0
+  7       1        3    1  6500
+  8       3        0    2     0
+  9       3        0    1     0
+  10      1        3    1  9500
+  11      3        0    2     0
+  12      3        0    1     0
+  13      3        0    1     0
+  14      1        3    2  6000
+  15      4        0    1     0
+  16      1        3    1  8000
+  17      3        0    2     0
+  18      3        0    1     0
+  19      3        0    1     0
+  20      3        0    2     0
+  21      3        0    2     0
+  22      1        3    2  3800
+  23      1        3    1  1000
+  24      3        0    1     0
+  25      1        3    2 10000
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+* filter(ESTADO == 1 &amp; P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       1        3    1  6000
+  2       1        3    2  5000
+  3       1        3    1  5000
+  4       1        3    1  6500
+  5       1        3    1  9500
+  6       1        3    2  6000
+  7       1        3    1  8000
+  8       1        3    2  3800
+  9       1        3    1  1000
+  10      1        3    2 10000
+  11      1        1    2  4500
+  12      1        3    1  4900
+  13      1        2    2 11000
+  14      1        3    1  9000
+  15      1        3    2  1500
+  16      1        3    1  8000
+  17      1        2    1  2500
+  18      1        3    1  7500
+  19      1        2    1  5000
+  20      1        2    2  5000
+  21      1        3    2  7000
+  22      1        3    1  6500
+  23      1        3    1  3000
+  24      1        3    1  2000
+  25      1        3    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+* mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",
+*                             CAT_OCUP == 2 ~ "Cuenta propia",
+*                             CAT_OCUP == 3 ~ "Asalariado"),
+*        CH04     = case_when(CH04 == 1 ~ "Varón",
+*                             CH04 == 2 ~ "Mujer"))
+```
+]]
+.column[.content[
+
+```
+     ESTADO      CAT_OCUP  CH04   P21
+  1       1    Asalariado Varón  6000
+  2       1    Asalariado Mujer  5000
+  3       1    Asalariado Varón  5000
+  4       1    Asalariado Varón  6500
+  5       1    Asalariado Varón  9500
+  6       1    Asalariado Mujer  6000
+  7       1    Asalariado Varón  8000
+  8       1    Asalariado Mujer  3800
+  9       1    Asalariado Varón  1000
+  10      1    Asalariado Mujer 10000
+  11      1        Patrón Mujer  4500
+  12      1    Asalariado Varón  4900
+  13      1 Cuenta propia Mujer 11000
+  14      1    Asalariado Varón  9000
+  15      1    Asalariado Mujer  1500
+  16      1    Asalariado Varón  8000
+  17      1 Cuenta propia Varón  2500
+  18      1    Asalariado Varón  7500
+  19      1 Cuenta propia Varón  5000
+  20      1 Cuenta propia Mujer  5000
+  21      1    Asalariado Mujer  7000
+  22      1    Asalariado Varón  6500
+  23      1    Asalariado Varón  3000
+  24      1    Asalariado Varón  2000
+  25      1    Asalariado Varón  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+* group_by(CAT_OCUP, CH04)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 23,725 x 4
+  # Groups:   CAT_OCUP, CH04 [6]
+     ESTADO CAT_OCUP   CH04    P21
+      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
+   1      1 Asalariado Varón  6000
+   2      1 Asalariado Mujer  5000
+   3      1 Asalariado Varón  5000
+   4      1 Asalariado Varón  6500
+   5      1 Asalariado Varón  9500
+   6      1 Asalariado Mujer  6000
+   7      1 Asalariado Varón  8000
+   8      1 Asalariado Mujer  3800
+   9      1 Asalariado Varón  1000
+  10      1 Asalariado Mujer 10000
+  # ... with 23,715 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+* summarise(ingreso_medio  = mean(P21),
+*           ingreso_desvio = sd(P21),
+*           ingreso_cv     = ingreso_desvio / ingreso_medio * 100)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 6 x 5
+  # Groups:   CAT_OCUP [3]
+    CAT_OCUP      CH04  ingreso_medio ingreso_desvio ingreso_cv
+    &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+  1 Asalariado    Mujer         6513.          4786.       73.5
+  2 Asalariado    Varón         8567.          5631.       65.7
+  3 Cuenta propia Mujer         4526.          4615.      102. 
+  4 Cuenta propia Varón         5875.          5214.       88.7
+  5 Patrón        Mujer         8584.          6114.       71.2
+  6 Patrón        Varón        10625.          9576.       90.1
+```
+]]
+
+---
+class: middle, center, inverse
+  
+&lt;img src="img/logo tidyr.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+## Funciones del paquete tidyr:
+
+&lt;br&gt;
+
+| __Función__      | __Acción__ |
+| :---             | ---:       |
+| `pivot_longer()` | *Apila en una columna los valores de varias*|
+| `pivot_wider()`   | *Separa en varias columnas los valores de una sola*|
+
+
+---
+class: middle, center
+
+# __pivot_longer()__
+***
+#### _Reestructura la base, apilando en una columna a varias de ellas y con sus respectivos valores_
+
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, CH04, P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       3        0    2     0
+  2       1        3    1  6000
+  3       1        3    2  5000
+  4       1        3    1  5000
+  5       4        0    1     0
+  6       3        0    2     0
+  7       1        3    1  6500
+  8       3        0    2     0
+  9       3        0    1     0
+  10      1        3    1  9500
+  11      3        0    2     0
+  12      3        0    1     0
+  13      3        0    1     0
+  14      1        3    2  6000
+  15      4        0    1     0
+  16      1        3    1  8000
+  17      3        0    2     0
+  18      3        0    1     0
+  19      3        0    1     0
+  20      3        0    2     0
+  21      3        0    2     0
+  22      1        3    2  3800
+  23      1        3    1  1000
+  24      3        0    1     0
+  25      1        3    2 10000
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+* filter(ESTADO == 1 &amp; P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       1        3    1  6000
+  2       1        3    2  5000
+  3       1        3    1  5000
+  4       1        3    1  6500
+  5       1        3    1  9500
+  6       1        3    2  6000
+  7       1        3    1  8000
+  8       1        3    2  3800
+  9       1        3    1  1000
+  10      1        3    2 10000
+  11      1        1    2  4500
+  12      1        3    1  4900
+  13      1        2    2 11000
+  14      1        3    1  9000
+  15      1        3    2  1500
+  16      1        3    1  8000
+  17      1        2    1  2500
+  18      1        3    1  7500
+  19      1        2    1  5000
+  20      1        2    2  5000
+  21      1        3    2  7000
+  22      1        3    1  6500
+  23      1        3    1  3000
+  24      1        3    1  2000
+  25      1        3    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+* mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",
+*                             CAT_OCUP == 2 ~ "Cuenta propia",
+*                             CAT_OCUP == 3 ~ "Asalariado"),
+*        CH04     = case_when(CH04 == 1 ~ "Varón",
+*                             CH04 == 2 ~ "Mujer"))
+```
+]]
+.column[.content[
+
+```
+     ESTADO      CAT_OCUP  CH04   P21
+  1       1    Asalariado Varón  6000
+  2       1    Asalariado Mujer  5000
+  3       1    Asalariado Varón  5000
+  4       1    Asalariado Varón  6500
+  5       1    Asalariado Varón  9500
+  6       1    Asalariado Mujer  6000
+  7       1    Asalariado Varón  8000
+  8       1    Asalariado Mujer  3800
+  9       1    Asalariado Varón  1000
+  10      1    Asalariado Mujer 10000
+  11      1        Patrón Mujer  4500
+  12      1    Asalariado Varón  4900
+  13      1 Cuenta propia Mujer 11000
+  14      1    Asalariado Varón  9000
+  15      1    Asalariado Mujer  1500
+  16      1    Asalariado Varón  8000
+  17      1 Cuenta propia Varón  2500
+  18      1    Asalariado Varón  7500
+  19      1 Cuenta propia Varón  5000
+  20      1 Cuenta propia Mujer  5000
+  21      1    Asalariado Mujer  7000
+  22      1    Asalariado Varón  6500
+  23      1    Asalariado Varón  3000
+  24      1    Asalariado Varón  2000
+  25      1    Asalariado Varón  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+* group_by(CAT_OCUP, CH04)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 23,725 x 4
+  # Groups:   CAT_OCUP, CH04 [6]
+     ESTADO CAT_OCUP   CH04    P21
+      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
+   1      1 Asalariado Varón  6000
+   2      1 Asalariado Mujer  5000
+   3      1 Asalariado Varón  5000
+   4      1 Asalariado Varón  6500
+   5      1 Asalariado Varón  9500
+   6      1 Asalariado Mujer  6000
+   7      1 Asalariado Varón  8000
+   8      1 Asalariado Mujer  3800
+   9      1 Asalariado Varón  1000
+  10      1 Asalariado Mujer 10000
+  # ... with 23,715 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+* summarise(ingreso_medio  = mean(P21),
+*           ingreso_desvio = sd(P21),
+*           ingreso_cv     = ingreso_desvio / ingreso_medio * 100)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 6 x 5
+  # Groups:   CAT_OCUP [3]
+    CAT_OCUP      CH04  ingreso_medio ingreso_desvio ingreso_cv
+    &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+  1 Asalariado    Mujer         6513.          4786.       73.5
+  2 Asalariado    Varón         8567.          5631.       65.7
+  3 Cuenta propia Mujer         4526.          4615.      102. 
+  4 Cuenta propia Varón         5875.          5214.       88.7
+  5 Patrón        Mujer         8584.          6114.       71.2
+  6 Patrón        Varón        10625.          9576.       90.1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+  summarise(ingreso_medio  = mean(P21),  
+            ingreso_desvio = sd(P21),  
+            ingreso_cv     = ingreso_desvio / ingreso_medio * 100) %&gt;%  
+* pivot_longer(cols = c("ingreso_medio", "ingreso_desvio", "ingreso_cv"),
+*              names_to = "Indicador", values_to = "Valor")
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 18 x 4
+  # Groups:   CAT_OCUP [3]
+     CAT_OCUP      CH04  Indicador        Valor
+     &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt;
+   1 Asalariado    Mujer ingreso_medio   6513. 
+   2 Asalariado    Mujer ingreso_desvio  4786. 
+   3 Asalariado    Mujer ingreso_cv        73.5
+   4 Asalariado    Varón ingreso_medio   8567. 
+   5 Asalariado    Varón ingreso_desvio  5631. 
+   6 Asalariado    Varón ingreso_cv        65.7
+   7 Cuenta propia Mujer ingreso_medio   4526. 
+   8 Cuenta propia Mujer ingreso_desvio  4615. 
+   9 Cuenta propia Mujer ingreso_cv       102. 
+  10 Cuenta propia Varón ingreso_medio   5875. 
+  11 Cuenta propia Varón ingreso_desvio  5214. 
+  12 Cuenta propia Varón ingreso_cv        88.7
+  13 Patrón        Mujer ingreso_medio   8584. 
+  14 Patrón        Mujer ingreso_desvio  6114. 
+  15 Patrón        Mujer ingreso_cv        71.2
+  16 Patrón        Varón ingreso_medio  10625. 
+  17 Patrón        Varón ingreso_desvio  9576. 
+  18 Patrón        Varón ingreso_cv        90.1
+```
+]]
+
+---
+
+---
+class: middle, center
+
+# __pivot_wider()__
+***
+#### _Reestructura la base, apilando en varias columnas a una de ellas por cada categoría de la misma_
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*base
+```
+]]
+.column[.content[
+
+```
+     ANO4 TRIMESTRE AGLOMERADO CH04 CH06 ESTADO CAT_OCUP NIVEL_ED  P21 TOT_P12
+  1  2015         2          2    2   41      3        0        4    0       0
+  2  2015         2          2    1   46      1        3        3 6000       0
+  3  2015         2          2    2   26      1        3        4 5000       0
+  4  2015         2          2    1   47      1        3        4 5000       0
+  5  2015         2          2    1    1      4        0        7    0       0
+  6  2015         2          2    2   58      3        0        2    0       0
+  7  2015         2          2    1   52      1        3        2 6500    4500
+  8  2015         2          2    2   16      3        0        3    0       0
+  9  2015         2          2    1   15      3        0        3    0       0
+  10 2015         2          2    1   45      1        3        2 9500       0
+   [ reached 'max' / getOption("max.print") -- omitted 60018 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+* select(ESTADO, CAT_OCUP, CH04, P21)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       3        0    2     0
+  2       1        3    1  6000
+  3       1        3    2  5000
+  4       1        3    1  5000
+  5       4        0    1     0
+  6       3        0    2     0
+  7       1        3    1  6500
+  8       3        0    2     0
+  9       3        0    1     0
+  10      1        3    1  9500
+  11      3        0    2     0
+  12      3        0    1     0
+  13      3        0    1     0
+  14      1        3    2  6000
+  15      4        0    1     0
+  16      1        3    1  8000
+  17      3        0    2     0
+  18      3        0    1     0
+  19      3        0    1     0
+  20      3        0    2     0
+  21      3        0    2     0
+  22      1        3    2  3800
+  23      1        3    1  1000
+  24      3        0    1     0
+  25      1        3    2 10000
+   [ reached 'max' / getOption("max.print") -- omitted 60003 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+* filter(ESTADO == 1 &amp; P21 &gt; 0)
+```
+]]
+.column[.content[
+
+```
+     ESTADO CAT_OCUP CH04   P21
+  1       1        3    1  6000
+  2       1        3    2  5000
+  3       1        3    1  5000
+  4       1        3    1  6500
+  5       1        3    1  9500
+  6       1        3    2  6000
+  7       1        3    1  8000
+  8       1        3    2  3800
+  9       1        3    1  1000
+  10      1        3    2 10000
+  11      1        1    2  4500
+  12      1        3    1  4900
+  13      1        2    2 11000
+  14      1        3    1  9000
+  15      1        3    2  1500
+  16      1        3    1  8000
+  17      1        2    1  2500
+  18      1        3    1  7500
+  19      1        2    1  5000
+  20      1        2    2  5000
+  21      1        3    2  7000
+  22      1        3    1  6500
+  23      1        3    1  3000
+  24      1        3    1  2000
+  25      1        3    1  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+* mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",
+*                             CAT_OCUP == 2 ~ "Cuenta propia",
+*                             CAT_OCUP == 3 ~ "Asalariado"),
+*        CH04     = case_when(CH04 == 1 ~ "Varón",
+*                             CH04 == 2 ~ "Mujer"))
+```
+]]
+.column[.content[
+
+```
+     ESTADO      CAT_OCUP  CH04   P21
+  1       1    Asalariado Varón  6000
+  2       1    Asalariado Mujer  5000
+  3       1    Asalariado Varón  5000
+  4       1    Asalariado Varón  6500
+  5       1    Asalariado Varón  9500
+  6       1    Asalariado Mujer  6000
+  7       1    Asalariado Varón  8000
+  8       1    Asalariado Mujer  3800
+  9       1    Asalariado Varón  1000
+  10      1    Asalariado Mujer 10000
+  11      1        Patrón Mujer  4500
+  12      1    Asalariado Varón  4900
+  13      1 Cuenta propia Mujer 11000
+  14      1    Asalariado Varón  9000
+  15      1    Asalariado Mujer  1500
+  16      1    Asalariado Varón  8000
+  17      1 Cuenta propia Varón  2500
+  18      1    Asalariado Varón  7500
+  19      1 Cuenta propia Varón  5000
+  20      1 Cuenta propia Mujer  5000
+  21      1    Asalariado Mujer  7000
+  22      1    Asalariado Varón  6500
+  23      1    Asalariado Varón  3000
+  24      1    Asalariado Varón  2000
+  25      1    Asalariado Varón  8500
+   [ reached 'max' / getOption("max.print") -- omitted 23700 rows ]
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+* group_by(CAT_OCUP, CH04)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 23,725 x 4
+  # Groups:   CAT_OCUP, CH04 [6]
+     ESTADO CAT_OCUP   CH04    P21
+      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
+   1      1 Asalariado Varón  6000
+   2      1 Asalariado Mujer  5000
+   3      1 Asalariado Varón  5000
+   4      1 Asalariado Varón  6500
+   5      1 Asalariado Varón  9500
+   6      1 Asalariado Mujer  6000
+   7      1 Asalariado Varón  8000
+   8      1 Asalariado Mujer  3800
+   9      1 Asalariado Varón  1000
+  10      1 Asalariado Mujer 10000
+  # ... with 23,715 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+* summarise(ingreso_medio  = mean(P21),
+*           ingreso_desvio = sd(P21),
+*           ingreso_cv     = ingreso_desvio / ingreso_medio * 100)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 6 x 5
+  # Groups:   CAT_OCUP [3]
+    CAT_OCUP      CH04  ingreso_medio ingreso_desvio ingreso_cv
+    &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+  1 Asalariado    Mujer         6513.          4786.       73.5
+  2 Asalariado    Varón         8567.          5631.       65.7
+  3 Cuenta propia Mujer         4526.          4615.      102. 
+  4 Cuenta propia Varón         5875.          5214.       88.7
+  5 Patrón        Mujer         8584.          6114.       71.2
+  6 Patrón        Varón        10625.          9576.       90.1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+  summarise(ingreso_medio  = mean(P21),  
+            ingreso_desvio = sd(P21),  
+            ingreso_cv     = ingreso_desvio / ingreso_medio * 100) %&gt;%  
+* pivot_longer(cols = c("ingreso_medio", "ingreso_desvio", "ingreso_cv"),
+*              names_to = "Indicador", values_to = "Valor")
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 18 x 4
+  # Groups:   CAT_OCUP [3]
+     CAT_OCUP      CH04  Indicador        Valor
+     &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt;
+   1 Asalariado    Mujer ingreso_medio   6513. 
+   2 Asalariado    Mujer ingreso_desvio  4786. 
+   3 Asalariado    Mujer ingreso_cv        73.5
+   4 Asalariado    Varón ingreso_medio   8567. 
+   5 Asalariado    Varón ingreso_desvio  5631. 
+   6 Asalariado    Varón ingreso_cv        65.7
+   7 Cuenta propia Mujer ingreso_medio   4526. 
+   8 Cuenta propia Mujer ingreso_desvio  4615. 
+   9 Cuenta propia Mujer ingreso_cv       102. 
+  10 Cuenta propia Varón ingreso_medio   5875. 
+  11 Cuenta propia Varón ingreso_desvio  5214. 
+  12 Cuenta propia Varón ingreso_cv        88.7
+  13 Patrón        Mujer ingreso_medio   8584. 
+  14 Patrón        Mujer ingreso_desvio  6114. 
+  15 Patrón        Mujer ingreso_cv        71.2
+  16 Patrón        Varón ingreso_medio  10625. 
+  17 Patrón        Varón ingreso_desvio  9576. 
+  18 Patrón        Varón ingreso_cv        90.1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+base %&gt;%  
+  select(ESTADO, CAT_OCUP, CH04, P21) %&gt;%  
+  filter(ESTADO == 1 &amp; P21 &gt; 0) %&gt;%  
+  mutate(CAT_OCUP = case_when(CAT_OCUP == 1 ~ "Patrón",  
+                              CAT_OCUP == 2 ~ "Cuenta propia",  
+                              CAT_OCUP == 3 ~ "Asalariado"),  
+         CH04     = case_when(CH04 == 1 ~ "Varón",  
+                              CH04 == 2 ~ "Mujer")) %&gt;%  
+  group_by(CAT_OCUP, CH04) %&gt;%  
+  summarise(ingreso_medio  = mean(P21),  
+            ingreso_desvio = sd(P21),  
+            ingreso_cv     = ingreso_desvio / ingreso_medio * 100) %&gt;%  
+  pivot_longer(cols = c("ingreso_medio", "ingreso_desvio", "ingreso_cv"),  
+               names_to = "Indicador", values_to = "Valor") %&gt;%  
+* pivot_wider(names_from = "Indicador", values_from = "Valor")
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 6 x 5
+  # Groups:   CAT_OCUP [3]
+    CAT_OCUP      CH04  ingreso_medio ingreso_desvio ingreso_cv
+    &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+  1 Asalariado    Mujer         6513.          4786.       73.5
+  2 Asalariado    Varón         8567.          5631.       65.7
+  3 Cuenta propia Mujer         4526.          4615.      102. 
+  4 Cuenta propia Varón         5875.          5214.       88.7
+  5 Patrón        Mujer         8584.          6114.       71.2
+  6 Patrón        Varón        10625.          9576.       90.1
+```
+]]
+
+---
+
+class: center, middle
+
+# __¡Manos a la obra!__
+
+&lt;style type="text/css"&gt;
+.remark-code{line-weight: 8; font-size: 75%}
+&lt;/style&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"ratio": "16:10",
+"ratio": "16:9",
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false,
